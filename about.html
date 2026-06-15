@@ -410,6 +410,15 @@ body::after{
 .contact-card .cc-l{display:block;font-family:var(--fm);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-35);}
 .contact-card .cc-v{display:block;font-size:15px;color:var(--text);margin-top:3px;}
 @media(max-width:760px){.contact-grid{grid-template-columns:1fr;}}
+.founder-features{margin-top:clamp(36px,5vw,64px);display:flex;flex-direction:column;gap:clamp(44px,6vw,92px);}
+.founder-feature{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,4.5vw,64px);align-items:center;}
+.founder-feature.alt .ff-media{order:2;}
+.ff-media{border-radius:20px;overflow:hidden;border:1px solid var(--line);aspect-ratio:4/3;box-shadow:0 30px 80px -40px rgba(0,0,0,0.85);}
+.ff-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1);}
+.founder-feature:hover .ff-media img{transform:scale(1.04);}
+.ff-body h3{font-family:var(--fd);font-weight:600;font-size:clamp(24px,3vw,34px);letter-spacing:-0.02em;}
+.ff-body p{color:var(--text-50);font-size:clamp(15px,1.5vw,17px);line-height:1.7;margin-top:10px;}
+@media(max-width:820px){.founder-feature{grid-template-columns:1fr;gap:18px;}.founder-feature.alt .ff-media{order:0;}}
 
 /* ══════ FINAL CTA ══════ */
 .final{position:relative;text-align:center;padding:clamp(110px,16vw,200px) 0;overflow:hidden;}
@@ -512,20 +521,20 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
     <div class="kicker rv">Über uns</div>
     <h2 class="title rv">Meet the Team</h2>
     <p class="sub rv d1">Mit langjähriger Erfahrung aus verschiedenen Branchen und Unternehmensgrößen setzen wir neue Standards.</p>
-    <div class="founder-bios">
-      <div class="fbio rv">
-        <div class="fbio-img"><img src="assets/valentin.jpg" alt="Valentin Hering, Gründer von Growth Unit" loading="lazy"/></div>
-        <div>
-          <h4>Valentin Hering</h4>
+    <div class="founder-features">
+      <div class="founder-feature rv">
+        <div class="ff-media"><img src="assets/valentin-lg.jpg" alt="Valentin Hering, Gründer von Growth Unit" loading="lazy"/></div>
+        <div class="ff-body">
+          <h3>Valentin Hering</h3>
           <div class="founder-role">Geschäftsführer · Marketing-Evangelist mit Fokus auf Performance</div>
           <p>Ich bin passionierter Marketer und habe in den letzten sechs Jahren kleine Budgets von 10.000 bis 400.000 Euro für Start-ups, Scale-ups, mittelständischen Unternehmen und Corporates mit einem klaren Performance Fokus verantwortet. Insbesondere in der Zusammenarbeit mit Venture Buildern habe ich Systeme entwickelt, die ein datenbasiertes Testing und nachhaltige Optimierung aller Paid Marketing Aktivitäten ermöglichen.</p>
           <a class="fbio-cal" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ399MbmebK1RnJhrtd572i01whZG7szUFzdifasOKy0pEEjHohvCpi9lMiBwOwpqzPbnSp9uSsU" target="_blank" rel="noopener">Termin mit Valentin vereinbaren <span class="material-symbols-outlined">arrow_outward</span></a>
         </div>
       </div>
-      <div class="fbio rv d1">
-        <div class="fbio-img"><img src="assets/janosch.jpg" alt="Janosch Jassim, Gründer von Growth Unit" loading="lazy"/></div>
-        <div>
-          <h4>Janosch Jassim</h4>
+      <div class="founder-feature rv alt">
+        <div class="ff-media"><img src="assets/janosch-lg.jpg" alt="Janosch Jassim, Gründer von Growth Unit" loading="lazy"/></div>
+        <div class="ff-body">
+          <h3>Janosch Jassim</h3>
           <div class="founder-role">Geschäftsführer · Digitalisierungsexperte mit unternehmerischem Fokus</div>
           <p>Mit fast 10 Jahren Erfahrung habe ich Unternehmen unterschiedlichster Größe, von KMUs bis hin zu Corporates wie der Deutschen Bahn, dabei unterstützt, ihre Prozesse zu automatisieren und ihre Digitalisierungsziele zu erreichen. Mein Fokus liegt darauf, Digitalisierung und Automatisierung gezielt einzusetzen, um unternehmerische Prozesse zu optimieren und eine nachhaltige Wachstumsstrategie zu ermöglichen.</p>
           <a class="fbio-cal" href="https://calendar.app.google/2Won3itVyUCMtDRLA" target="_blank" rel="noopener">Termin mit Janosch vereinbaren <span class="material-symbols-outlined">arrow_outward</span></a>
