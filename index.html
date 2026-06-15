@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<style id="gugate-css">#gugate{position:fixed;inset:0;z-index:2147483647;background:#000;display:flex;align-items:center;justify-content:center;font-family:Inter,system-ui,-apple-system,sans-serif}#gugate form{display:flex;flex-direction:column;gap:13px;width:min(330px,84vw);text-align:center}#gugate h1{color:#fff;font-size:19px;font-weight:600;margin:0}#gugate p{color:rgba(255,255,255,.5);font-size:13px;margin:0 0 6px}#gugate input{padding:13px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#0b0d14;color:#fff;font-size:15px;outline:none}#gugate input:focus{border-color:#0055ff}#gugate button{padding:13px 16px;border-radius:12px;border:none;background:#0055ff;color:#fff;font-size:15px;font-weight:600;cursor:pointer}#gugate .err{color:#ff5566;font-size:12px;min-height:14px}</style>
+<script>
+(function(){
+  if(location.protocol==="file:")return;
+  if(sessionStorage.getItem("gu_ok")==="1")return;
+  var H="ad0498233bec88329c56bedd4dd86bf1ad7e9c71ae426846d753d5b1d9613b62";
+  function build(){
+    var ov=document.createElement("div");ov.id="gugate";
+    ov.innerHTML="<form><h1>Growth Unit · Preview</h1><p>Diese Vorschau ist passwortgeschützt.</p><input type=password autofocus placeholder=Passwort aria-label=Passwort><div class=err></div><button type=submit>Ansehen</button></form>";
+    (document.body||document.documentElement).appendChild(ov);
+    try{document.documentElement.style.overflow="hidden";}catch(e){}
+    async function sha(s){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0");}).join("");}
+    ov.querySelector("form").addEventListener("submit",async function(e){
+      e.preventDefault();var inp=ov.querySelector("input"),err=ov.querySelector(".err");
+      try{var h=await sha(inp.value);}catch(x){err.textContent="Browser nicht unterstützt.";return;}
+      if(h===H){sessionStorage.setItem("gu_ok","1");ov.remove();document.documentElement.style.overflow="";}
+      else{err.textContent="Falsches Passwort.";inp.select();}
+    });
+    setTimeout(function(){var i=ov.querySelector("input");if(i)i.focus();},50);
+  }
+  if(document.body)build();else document.addEventListener("DOMContentLoaded",build);
+})();
+</script>
 <meta name="robots" content="noindex"/>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
