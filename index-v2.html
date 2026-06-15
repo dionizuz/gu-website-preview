@@ -74,6 +74,9 @@ body::after{
 .title{font-family:var(--fd);font-weight:600;font-size:clamp(27px,3.3vw,44px);line-height:1.08;letter-spacing:-0.03em;max-width:20ch;}
 .sub{margin-top:30px;font-size:clamp(16px,1.35vw,20px);line-height:1.6;color:var(--text-50);max-width:62ch;}
 .accent{color:var(--blue-light);}
+.rot{display:inline-block;}
+.rot-w{display:inline-block;transition:opacity .3s ease,transform .3s ease;}
+.rot-w.out{opacity:0;transform:translateY(-0.35em);}
 @media(max-width:768px){.wrap{padding:0 22px;}}
 
 /* ── buttons ── */
@@ -111,6 +114,9 @@ body::after{
 .hero h1 .line{display:block;overflow:hidden;padding-bottom:0.06em;margin-bottom:-0.06em;}
 .hero h1 .line-inner{display:block;}
 .hero-sub{margin-top:34px;font-size:clamp(17px,1.5vw,21px);line-height:1.6;color:var(--text-50);max-width:48ch;}
+.hero-trust{display:flex;flex-wrap:wrap;gap:12px 26px;margin-top:28px;}
+.hero-trust>span{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--text-50);}
+.hero-trust .material-symbols-outlined{font-size:18px;color:var(--blue-light);}
 .hero-actions{margin-top:44px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
 .hero-visual{position:relative;}
 .hero-dash{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 100px -30px rgba(0,0,0,0.8),0 0 0 1px rgba(255,255,255,0.02);transform:perspective(1500px) rotateY(-8deg) rotateX(3deg);transition:transform .8s cubic-bezier(.16,1,.3,1);}
@@ -393,23 +399,37 @@ body::after{
 .team-kicker{justify-content:center;margin-bottom:26px;}
 .team-photo-c{width:64%;max-width:700px;margin:0;}
 .team-photo-c img{width:100%;height:auto;display:block;}
-.team-copy{position:relative;z-index:2;max-width:760px;margin-top:clamp(-185px,-11.5vw,-52px);}
+.team-copy{position:relative;z-index:2;max-width:760px;margin-top:clamp(-360px,-24vw,-90px);}
 .team-hero .title{max-width:none;}
 .team-hero .sub{margin:18px auto 0;}
-@media(max-width:760px){.team-photo-c{width:94%;}.team-copy{margin-top:-14vw;}}
+@media(max-width:760px){.team-photo-c{width:94%;}.team-copy{margin-top:-24vw;}}
 .fbio-cal{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;font-weight:500;color:var(--blue-light);transition:gap .3s ease,color .3s ease;}
 .fbio-cal .material-symbols-outlined{font-size:17px;}
 .fbio-cal:hover{gap:11px;color:#fff;}
-.leitbild{max-width:720px;margin:clamp(40px,5vw,64px) auto 0;text-align:center;}
+.leitbild{max-width:880px;margin:clamp(72px,10vw,128px) auto 0;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.025));border:1px solid var(--line-strong);border-radius:24px;padding:clamp(36px,5vw,60px);}
 .leitbild .kicker{justify-content:center;margin-bottom:18px;}
-.leitbild p{color:var(--text-50);font-size:clamp(16px,1.6vw,20px);line-height:1.7;}
+.leitbild p{color:var(--text);font-size:clamp(16px,1.6vw,20px);line-height:1.7;}
+.ff-cta{margin-top:22px;}
 .contact-grid{margin-top:clamp(32px,4vw,48px);display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 .contact-card{display:flex;align-items:center;gap:14px;padding:20px 22px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2);transition:border-color .3s ease,transform .3s ease;}
 .contact-card:hover{border-color:var(--line-strong);transform:translateY(-2px);}
 .contact-card .material-symbols-outlined{font-size:24px;color:var(--blue-light);flex-shrink:0;}
 .contact-card .cc-l{display:block;font-family:var(--fm);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-35);}
 .contact-card .cc-v{display:block;font-size:15px;color:var(--text);margin-top:3px;}
-@media(max-width:760px){.contact-grid{grid-template-columns:1fr;}}
+.contact-grid.two{grid-template-columns:repeat(2,1fr);max-width:760px;}
+.contact-or{margin-top:clamp(36px,5vw,56px);color:var(--text-50);font-size:15px;}
+.contact-or + .contact-grid{margin-top:14px;}
+.legal{max-width:780px;}
+.legal-updated{font-family:var(--fm);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-35);margin-bottom:26px;}
+.legal h2{font-family:var(--fd);font-weight:600;font-size:clamp(20px,2.4vw,28px);letter-spacing:-0.02em;margin:40px 0 14px;}
+.legal h3{font-family:var(--fd);font-weight:600;font-size:17px;margin:26px 0 10px;}
+.legal p{color:var(--text-50);font-size:15px;line-height:1.75;margin:0 0 14px;}
+.legal .legal-label{color:var(--text);font-weight:600;margin:18px 0 6px;}
+.legal .legal-attr{font-size:12.5px;color:var(--text-35);margin-top:30px;}
+.legal ul{margin:0 0 16px;padding-left:20px;}
+.legal li{color:var(--text-50);font-size:15px;line-height:1.7;margin-bottom:6px;}
+.legal a{color:var(--blue-light);text-decoration:underline;word-break:break-word;}
+@media(max-width:760px){.contact-grid,.contact-grid.two{grid-template-columns:1fr;}}
 .founder-features{margin-top:clamp(36px,5vw,64px);display:flex;flex-direction:column;gap:clamp(44px,6vw,92px);}
 .founder-feature{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,4.5vw,64px);align-items:center;}
 .founder-feature.alt .ff-media{order:2;}
@@ -473,6 +493,9 @@ body::after{
 .form-submit:hover{background:var(--blue-light);}
 .form-submit:disabled{opacity:.6;pointer-events:none;}
 .form-privacy{font-size:12px;color:var(--text-35);text-align:center;margin-top:10px;line-height:1.5;}
+.form-check{display:flex;align-items:flex-start;gap:10px;margin-top:6px;font-size:12.5px;color:var(--text-50);line-height:1.5;cursor:pointer;}
+.form-check input{margin-top:1px;width:16px;height:16px;flex-shrink:0;accent-color:var(--blue);cursor:pointer;}
+.form-check a{color:var(--blue-light);text-decoration:underline;}
 .modal-success{padding:46px 30px;text-align:center;display:none;}
 .modal-success.show{display:block;}
 .modal-form-wrap.hide{display:none;}
@@ -520,13 +543,17 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
   <div class="hero-grid">
     <div>
       <h1 class="hero-h1">
-        <span class="line"><span class="line-inner">Nicht dein Marketing verliert Anfragen.</span></span>
-        <span class="line"><span class="line-inner">Sondern <span class="accent">was danach passiert.</span></span></span>
+        <span class="line"><span class="line-inner">Aus <span class="rot" id="heroRot"><span class="rot-w accent">jeder Anfrage</span></span> das Maximum.</span></span>
+        <span class="line"><span class="line-inner"><span class="accent">Messbar.</span></span></span>
       </h1>
-      <p class="hero-sub">Wir richten dein CRM so ein, dass keine Anfrage mehr liegen bleibt, jedes Angebot nachgefasst wird und du jederzeit siehst, wo jeder Deal steht.</p>
+      <p class="hero-sub">Wir bauen das System, das aus deinen bestehenden Anfragen mehr Termine und mehr Aufträge macht, ohne einen Euro mehr Werbung.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#cta">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
-        <a class="btn btn-ghost" href="#process">So arbeiten wir <span class="material-symbols-outlined">arrow_downward</span></a>
+        <a class="btn btn-ghost" href="#testimonials">Fallstudie ansehen <span class="material-symbols-outlined">arrow_downward</span></a>
+      </div>
+      <div class="hero-trust">
+        <span><span class="material-symbols-outlined">verified</span>Offizieller Pipedrive-Partner</span>
+        <span><span class="material-symbols-outlined">verified</span>Förderfähige Beratung</span>
       </div>
     </div>
     <div class="hero-visual">
@@ -611,9 +638,9 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
 <!-- 02 SYSTEM -->
 <section class="sec" id="funnel">
   <div class="wrap">
-    <div class="kicker rv"><span class="idx">02</span><span class="bar"></span>Ein System</div>
-    <h2 class="title rv">Von der ersten Anfrage bis zum Auftrag, an einem Ort</h2>
-    <p class="sub rv d1">Jede Anfrage läuft durch denselben klaren Weg. Nichts bleibt liegen, nichts wird vergessen, und du siehst jederzeit, wo jeder Lead steht.</p>
+    <div class="kicker rv"><span class="idx">02</span><span class="bar"></span>Das System dahinter</div>
+    <h2 class="title rv">Keine Anfrage fällt mehr durchs Raster.</h2>
+    <p class="sub rv d1">Jede Anfrage läuft automatisch durch denselben Weg: erfasst, bestätigt, qualifiziert, nachgefasst. Du verlierst keine mehr und siehst jederzeit, wo jeder Deal steht.</p>
     <div class="stage rv">
       <div class="stage-video">
         <video class="v-desktop" autoplay muted loop playsinline preload="metadata" poster="assets/journey-start.png"><source src="assets/journey.mp4" type="video/mp4"/></video>
@@ -761,8 +788,8 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
   <div class="wrap">
     <div class="entry-card rv">
       <div class="entry-badge">Der Einstieg</div>
-      <h3>Ein klarer Plan, bevor du dich festlegst.</h3>
-      <p>Wir starten mit einem kostenlosen Strategiegespräch und einer Analyse deines Anfrageprozesses. Du bekommst eine ehrliche Einschätzung, wo wir die größten Hebel sehen, und einen konkreten Maßnahmenplan mit Soll-Ist-Abgleich. Auf dieser Grundlage entscheidest du in Ruhe, ob und in welchem Umfang wir umsetzen.</p>
+      <h3>Du bekommst einen Fahrplan, bevor du einen Cent investierst.</h3>
+      <p>Im kostenlosen Strategiegespräch analysieren wir deinen Anfrageprozess und du bekommst einen konkreten Maßnahmenplan mit Soll-Ist-Abgleich: wo Umsatz liegen bleibt und welche Schritte das ändern. Den Plan behältst du, auch wenn wir nicht zusammenarbeiten.</p>
       <a class="btn btn-primary" href="#cta">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
     </div>
   </div>
@@ -810,11 +837,11 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
     </div>
     <div class="founder-bios">
       <div class="fbio rv">
-        <div class="fbio-img"><img src="assets/janosch.jpg" alt="Janosch Jassim" loading="lazy"/></div>
+        <div class="fbio-img"><img src="assets/janosch.jpg?v=4" alt="Janosch Jassim" loading="lazy"/></div>
         <div><h4>Janosch Jassim</h4><div class="founder-role">Prozesse, CRM &amp; Förderung</div><p>Knapp 10 Jahre Digitalisierung im Mittelstand und Konzern, unter anderem bei der Deutschen Bahn. Baut CRM-Systeme und Automatisierungen, geprüfter Förderberater.</p></div>
       </div>
       <div class="fbio rv d1">
-        <div class="fbio-img"><img src="assets/valentin.jpg" alt="Valentin Hering" loading="lazy"/></div>
+        <div class="fbio-img"><img src="assets/valentin.jpg?v=3" alt="Valentin Hering" loading="lazy"/></div>
         <div><h4>Valentin Hering</h4><div class="founder-role">Performance, Vertrieb &amp; Daten</div><p>6 Jahre Verantwortung für Marketingbudgets von 10.000 bis 400.000 Euro, über Startups, Scale-ups und Mittelstand. Schwerpunkt: Datenbasiertes Testing sowie Anfragen- und Vertriebsoptimierung.</p></div>
       </div>
     </div>
@@ -837,7 +864,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
     <button class="modal-close" id="modalClose"><span class="material-symbols-outlined" style="font-size:20px;">close</span></button>
     <div class="modal-form-wrap" id="modalFormWrap">
       <div class="modal-header">
-        <div class="modal-avatar"><img src="assets/valentin.jpg" alt="Valentin Hering"/></div>
+        <div class="modal-avatar"><img src="assets/valentin.jpg?v=3" alt="Valentin Hering"/></div>
         <div><h3>Strategiegespräch vereinbaren</h3><p>Ein erstes Gespräch mit den Gründern. Direkt und unverbindlich.</p></div>
       </div>
       <div class="modal-body">
@@ -854,6 +881,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
           <div class="ff"><label for="fc">Unternehmen</label><input id="fc" type="text" placeholder="Name deines Unternehmens" required/></div>
           <div class="ff"><label for="fe">E-Mail-Adresse</label><input id="fe" type="email" placeholder="deine@email.de" required/></div>
           <div class="ff"><label for="fp">Telefonnummer</label><input id="fp" type="tel" placeholder="+49 ..." required/></div>
+          <label class="form-check"><input id="fprivacy" type="checkbox" required/><span>Ich habe die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Daten einverstanden.</span></label>
           <button type="submit" class="form-submit" id="formSubmit">Strategiegespräch anfragen <span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span></button>
         </form>
         <p class="form-privacy">Wir nutzen deine Daten ausschließlich, um dich für das Strategiegespräch zu kontaktieren.</p>
@@ -889,7 +917,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
     </div>
     <div class="footer-bot">
       <span>&copy; 2026 Growth Unit GmbH</span>
-      <div class="footer-legal"><a href="https://www.growthunit.de/impressum" target="_blank" rel="noopener">Impressum</a><a href="https://www.growthunit.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a></div>
+      <div class="footer-legal"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>
     </div>
   </div>
 </footer>
@@ -901,6 +929,17 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
 // baseline reveals (work without GSAP)
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}})},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+// hero word rotator: Anfrage <-> Lead
+(function(){
+  var el=document.getElementById('heroRot'); if(!el)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var w=el.querySelector('.rot-w'), words=['jeder Anfrage','jedem Lead'], i=0;
+  setInterval(function(){
+    w.classList.add('out');
+    setTimeout(function(){ i=(i+1)%words.length; w.textContent=words[i]; w.classList.remove('out'); },300);
+  },2600);
+})();
 
 // nav
 const nav=document.getElementById('nav');
@@ -988,12 +1027,13 @@ cForm.addEventListener('submit',async e=>{
 
   // hero line reveal
   gsap.set('.hero-h1 .line-inner',{yPercent:115});
-  gsap.set(['.hero-sub','.hero-actions','.hero-visual'],{opacity:0,y:30});
+  gsap.set(['.hero-sub','.hero-actions','.hero-trust','.hero-visual'],{opacity:0,y:30});
   gsap.timeline({defaults:{ease:'power3.out'}})
     .to('.hero-h1 .line-inner',{yPercent:0,duration:1.1,stagger:0.1,ease:'power4.out'},0.15)
     .to('.hero-visual',{opacity:1,y:0,duration:1.1},0.4)
     .to('.hero-sub',{opacity:1,y:0,duration:0.9},0.7)
-    .to('.hero-actions',{opacity:1,y:0,duration:0.9},0.85);
+    .to('.hero-actions',{opacity:1,y:0,duration:0.9},0.85)
+    .to('.hero-trust',{opacity:1,y:0,duration:0.9},1.0);
 
   // funnel line scrub
   var flow=document.getElementById('flow');
