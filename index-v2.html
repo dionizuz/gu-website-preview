@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Growth Unit · CRM & Anfrageprozess</title>
+<meta name="description" content="Wir richten dein CRM so ein, dass keine Anfrage mehr liegen bleibt, jedes Angebot nachgefasst wird und du jederzeit siehst, wo jeder Deal steht. Für eigentümergeführte Betriebe."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#000000; --bg-2:#06070c;
+  --text:rgba(255,255,255,0.92); --text-70:rgba(255,255,255,0.7); --text-50:rgba(255,255,255,0.5); --text-35:rgba(255,255,255,0.35);
+  --line:rgba(255,255,255,0.12); --line-soft:rgba(255,255,255,0.07); --line-strong:rgba(255,255,255,0.22);
+  --glass:rgba(255,255,255,0.035); --glass-2:rgba(255,255,255,0.06);
+  --blue:#0055ff; --blue-light:#4d8aff; --blue-deep:#001f4d; --blue-glow:rgba(0,85,255,0.35);
+  --green:#00cc66; --red:#ff3344;
+  --fd:'Inter Tight','Inter',sans-serif; --fb:'Inter',sans-serif; --fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+
+/* brand signature background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(70% 50% at 80% -5%, rgba(0,85,255,0.16), transparent 60%),
+    radial-gradient(60% 50% at 0% 100%, rgba(0,31,77,0.5), transparent 60%),
+    var(--bg);
+}
+/* noise */
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:256px;
+}
+
+/* ── layout primitives ── */
+.wrap{max-width:1300px;margin:0 auto;padding:0 40px;}
+.sec{padding:clamp(68px,8.5vw,114px) 0;position:relative;}
+.sec + .sec{border-top:1px solid var(--line-soft);}
+.kicker{font-family:var(--fm);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text);display:flex;align-items:center;gap:14px;margin-bottom:30px;}
+.kicker .idx,.kicker .bar{display:none;}
+.title{font-family:var(--fd);font-weight:600;font-size:clamp(27px,3.3vw,44px);line-height:1.08;letter-spacing:-0.03em;max-width:20ch;}
+.sub{margin-top:30px;font-size:clamp(16px,1.35vw,20px);line-height:1.6;color:var(--text-50);max-width:62ch;}
+.accent{color:var(--blue-light);}
+@media(max-width:768px){.wrap{padding:0 22px;}}
+
+/* ── buttons ── */
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--fb);font-weight:500;font-size:16px;border-radius:100px;cursor:pointer;border:none;transition:transform .4s cubic-bezier(.16,1,.3,1),background .3s,color .3s,box-shadow .3s;}
+.btn .material-symbols-outlined{font-size:19px;transition:transform .3s;}
+.btn:hover .material-symbols-outlined{transform:translateX(3px);}
+.btn-primary{background:var(--blue);color:#fff;padding:15px 28px;}
+.btn-primary:hover{background:var(--blue-light);box-shadow:0 12px 40px rgba(0,85,255,0.35);}
+.btn-ghost{color:var(--text);padding:15px 8px;}
+.btn-ghost:hover{color:var(--blue-light);}
+.btn-outline{border:1px solid var(--line-strong);color:#fff;padding:15px 28px;background:transparent;}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,0.04);}
+
+/* ── reveal ── */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.rv.vis{opacity:1;transform:none;}
+.d1{transition-delay:.08s;}.d2{transition-delay:.16s;}.d3{transition-delay:.24s;}.d4{transition-delay:.32s;}.d5{transition-delay:.40s;}
+
+/* ── nav ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:22px 0;transition:all .5s cubic-bezier(.16,1,.3,1);}
+.nav.scrolled{padding:13px 0;background:rgba(0,0,0,0.6);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border-bottom:1px solid var(--line-soft);}
+.nav-in{max-width:1300px;margin:0 auto;padding:0 40px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:var(--fd);font-weight:700;font-size:20px;letter-spacing:-0.03em;color:#fff;}
+.nav-links{display:flex;align-items:center;gap:34px;}
+.nav-links a{font-size:14px;color:var(--text-50);transition:color .3s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{font-size:14px;font-weight:500;color:#fff;border:1px solid var(--line-strong);padding:9px 20px;border-radius:100px;transition:all .3s;}
+.nav-cta:hover{background:var(--blue);border-color:var(--blue);}
+@media(max-width:900px){.nav-links{display:none;}.nav-in{padding:0 22px;}}
+
+/* ══════ HERO ══════ */
+.hero{min-height:100vh;display:flex;align-items:center;padding:140px 0 90px;position:relative;}
+.hero-grid{max-width:1300px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center;width:100%;}
+.hero h1{font-family:var(--fd);font-weight:600;font-size:clamp(31px,4.3vw,52px);line-height:1.07;letter-spacing:-0.03em;max-width:640px;}
+.hero h1 .line{display:block;overflow:hidden;padding-bottom:0.06em;margin-bottom:-0.06em;}
+.hero h1 .line-inner{display:block;}
+.hero-sub{margin-top:34px;font-size:clamp(17px,1.5vw,21px);line-height:1.6;color:var(--text-50);max-width:48ch;}
+.hero-actions{margin-top:44px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.hero-visual{position:relative;}
+.hero-dash{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 100px -30px rgba(0,0,0,0.8),0 0 0 1px rgba(255,255,255,0.02);transform:perspective(1500px) rotateY(-8deg) rotateX(3deg);transition:transform .8s cubic-bezier(.16,1,.3,1);}
+.hero-dash:hover{transform:perspective(1500px) rotateY(-3deg) rotateX(1deg) translateY(-6px);}
+.hero-dash::after{content:'';position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 0%,transparent,rgba(0,0,0,0.25));pointer-events:none;z-index:1;}
+.hero-dash video{display:block;width:100%;height:auto;}
+.sec-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.4;z-index:0;pointer-events:none;}
+.v-mobile{display:none;}
+@media(max-width:768px){.video-wrap{aspect-ratio:9/16;max-width:420px;margin-left:auto;margin-right:auto;}.v-desktop{display:none;}.v-mobile{display:block;}}
+.hero-dash-badge{position:absolute;top:14px;left:14px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);color:#fff;font-size:12px;font-weight:500;padding:7px 12px;border-radius:9px;border:1px solid var(--line);z-index:2;}
+.live{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr;gap:48px;}.hero-visual{max-width:560px;}}
+
+/* ══════ SYSTEM STAGE (video + process orbs in gradient) ══════ */
+.stage{position:relative;margin-top:clamp(40px,5vw,64px);}
+.stage-video{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--bg-2);aspect-ratio:16/9;box-shadow:0 40px 100px -40px rgba(0,0,0,0.9);}
+.stage-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.stage-video::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(2,4,10,0.985) 0%,rgba(2,4,10,0.9) 16%,rgba(2,4,10,0.56) 38%,transparent 64%);pointer-events:none;}
+.proc{--orb:clamp(42px,4.2vw,58px);position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 clamp(14px,2.5vw,34px) clamp(16px,2.4vw,30px);display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.proc-track{position:absolute;left:9%;right:9%;top:calc(var(--orb)/2);height:2px;border-radius:2px;background:var(--line-strong);overflow:hidden;z-index:1;}
+.proc-track::after{content:'';position:absolute;top:0;left:0;height:100%;width:22%;background:linear-gradient(90deg,transparent,var(--blue-light),transparent);box-shadow:0 0 12px rgba(0,85,255,0.55);animation:procFlow 3.6s linear infinite;}
+@keyframes procFlow{0%{transform:translateX(-120%);}100%{transform:translateX(560%);}}
+@keyframes procFlowV{0%{transform:translateY(-130%);}100%{transform:translateY(600%);}}
+.pstep{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;gap:9px;}
+.orb{width:var(--orb);height:var(--orb);border-radius:50%;overflow:hidden;border:1px solid var(--line-strong);background:var(--bg);box-shadow:0 0 0 4px rgba(0,85,255,0.1),0 6px 16px rgba(0,0,0,0.55);flex-shrink:0;}
+.orb video{width:100%;height:100%;object-fit:cover;}
+.pstep-l{font-size:11px;font-weight:500;color:rgba(255,255,255,0.86);line-height:1.2;max-width:14ch;}
+@media(max-width:768px){
+  .stage{max-width:420px;margin-left:auto;margin-right:auto;}
+  .stage-video{aspect-ratio:9/16;width:100%;max-width:none;margin:0;}
+  .proc{position:absolute;left:0;right:0;bottom:0;top:auto;z-index:3;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:0 14px 16px;}
+  .proc-track{display:none;}
+  .pstep{flex-direction:row;align-items:center;text-align:left;gap:12px;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:linear-gradient(90deg,rgba(2,4,10,0.78) 0%,rgba(2,4,10,0.38) 100%);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+  .pstep-l{max-width:none;font-size:12px;}
+  .orb{width:40px;height:40px;}
+  .proc.build .pstep{opacity:0;transform:translateY(14px) scale(0.96);transition:opacity .45s ease,transform .5s cubic-bezier(.16,1,.3,1);}
+  .proc.build .pstep.show{opacity:1;transform:none;}
+}
+
+/* ══════ HERO PIPELINE (coded, German labels) ══════ */
+.pipeline{position:relative;background:linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.02));border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 40px 100px -30px rgba(0,0,0,0.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.pl-head{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;color:var(--text);margin-bottom:18px;}
+.pl-live-label{margin-left:auto;font-family:var(--fm);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);}
+.pl-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.pl-col{background:rgba(255,255,255,0.02);border:1px solid var(--line-soft);border-radius:10px;padding:10px 8px;min-height:158px;transition:border-color .4s,background .4s;}
+.pl-col.on{border-color:var(--blue);background:rgba(0,85,255,0.06);}
+.pl-col.won.on{border-color:var(--green);background:rgba(0,204,102,0.06);}
+.pl-col-h{font-size:9px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-50);margin-bottom:11px;display:flex;justify-content:space-between;transition:color .4s;}
+.pl-col.on .pl-col-h{color:var(--blue-light);}
+.pl-col.won.on .pl-col-h{color:var(--green);}
+.pl-card{height:26px;border-radius:6px;background:rgba(255,255,255,0.05);margin-bottom:6px;position:relative;}
+.pl-card::before{content:'';position:absolute;top:8px;left:7px;right:32%;height:4px;border-radius:2px;background:rgba(255,255,255,0.13);}
+.pl-card::after{content:'';position:absolute;top:15px;left:7px;right:58%;height:3px;border-radius:2px;background:rgba(255,255,255,0.08);}
+.pl-deal{border-radius:7px;padding:8px 9px;background:rgba(0,85,255,0.16);border:1px solid var(--blue);margin-bottom:6px;opacity:0;transform:translateY(-7px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1);box-shadow:0 6px 20px rgba(0,85,255,0.3);}
+.pl-col.on .pl-deal{opacity:1;transform:none;}
+.pl-col.won.on .pl-deal{background:rgba(0,204,102,0.16);border-color:var(--green);box-shadow:0 6px 20px rgba(0,204,102,0.3);}
+.pl-deal-tag{font-family:var(--fm);font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue-light);}
+.pl-col.won.on .pl-deal-tag{color:var(--green);}
+.pl-deal-name{font-size:11px;font-weight:600;color:#fff;margin-top:3px;}
+.pl-deal-val{font-size:10px;color:var(--text-70);margin-top:1px;}
+.pl-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:15px;border-top:1px solid var(--line-soft);}
+.pl-foot-l{font-size:11px;color:var(--text-50);}
+.pl-foot-v{font-family:var(--fd);font-weight:600;font-size:17px;color:var(--green);letter-spacing:-0.02em;}
+@media(max-width:480px){.pl-col{min-height:132px;padding:8px 6px;}.pl-col-h{font-size:8px;}}
+
+/* ══════ PROBLEMS (01) ══════ */
+.prob-grid{margin-top:clamp(48px,6vw,80px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px) clamp(28px,4vw,64px);}
+.prob{position:relative;}
+.prob-img{border-radius:14px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/10;background:var(--bg-2);}
+.prob-img img,.prob-img video{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .5s;opacity:.92;}
+.prob:hover .prob-img img,.prob:hover .prob-img video{transform:scale(1.05);opacity:1;}
+.prob-head{display:flex;align-items:baseline;gap:16px;margin-top:26px;}
+.prob-num{font-family:var(--fm);font-size:13px;color:var(--blue);letter-spacing:0.1em;}
+.prob h3{font-family:var(--fd);font-weight:600;font-size:clamp(21px,2vw,26px);letter-spacing:-0.03em;line-height:1.1;}
+.prob p{margin-top:14px;color:var(--text-50);font-size:15.5px;line-height:1.65;max-width:46ch;}
+@media(max-width:760px){.prob-grid{grid-template-columns:1fr;}}
+
+/* Stolpersteine scroll-focus (desktop only): active = color + playing, others grayscale + paused. Original size kept. */
+@media(min-width:901px){
+  .prob-img{transition:border-color .4s ease;}
+  .prob-img video{filter:grayscale(1);opacity:0.5;transition:filter .6s ease,opacity .6s ease,transform .7s cubic-bezier(.16,1,.3,1);}
+  .prob.active .prob-img video{filter:grayscale(0);opacity:1;}
+  .prob.active .prob-img{border-color:rgba(0,85,255,0.55);}
+}
+
+/* ══════ STAT BAND ══════ */
+.stat{position:relative;overflow:hidden;}
+.stat-glow{position:absolute;top:30%;left:62%;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,var(--blue-glow),transparent 65%);filter:blur(50px);pointer-events:none;z-index:0;}
+.stat-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr 0.9fr;gap:clamp(40px,6vw,90px);align-items:center;}
+.stat-num{font-family:var(--fd);font-weight:700;font-size:clamp(110px,19vw,260px);line-height:0.82;letter-spacing:-0.06em;color:var(--blue-light);}
+.stat-text{margin-top:24px;font-size:clamp(20px,2.2vw,28px);font-weight:500;line-height:1.35;color:var(--text);max-width:18ch;}
+.stat-note{margin-top:26px;font-family:var(--fm);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-35);}
+.stat-q{border:1px solid var(--line);border-radius:18px;padding:clamp(28px,4vw,44px);background:var(--glass);}
+.stat-q h3{font-family:var(--fd);font-weight:600;font-size:clamp(22px,2.4vw,30px);letter-spacing:-0.03em;margin-bottom:16px;}
+.stat-q p{color:var(--text-50);font-size:clamp(16px,1.5vw,19px);line-height:1.6;}
+.stat-q strong{color:#fff;font-weight:600;}
+@media(max-width:820px){.stat-grid{grid-template-columns:1fr;}.stat-glow{left:40%;}}
+
+/* ══════ SYSTEM (02) + VIDEO ══════ */
+.video-wrap{margin-top:clamp(48px,6vw,72px);position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);aspect-ratio:21/9;background:var(--bg-2);box-shadow:0 40px 100px -40px rgba(0,0,0,0.9);}
+.video-wrap video,.video-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.video-ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(24px,4vw,40px);background:linear-gradient(0deg,rgba(0,0,0,0.7),transparent 55%);}
+.video-ov .vk{font-family:var(--fm);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-70);margin-bottom:16px;}
+.chips{display:flex;flex-wrap:wrap;gap:9px;}
+.chips span{font-size:13px;font-weight:500;color:#fff;background:rgba(255,255,255,0.07);border:1px solid var(--line);backdrop-filter:blur(8px);padding:7px 15px;border-radius:100px;}
+.chips span:not(:last-child)::after{content:'→';margin-left:11px;opacity:.4;}
+.flow{margin-top:clamp(40px,5vw,64px);display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative;}
+.flow::before{content:'';position:absolute;top:26px;left:8%;right:8%;height:1px;background:var(--line);z-index:0;}
+.flow-line{position:absolute;top:26px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,var(--blue),var(--blue-light));transform-origin:left;transform:scaleX(0);transition:transform 1.6s cubic-bezier(.16,1,.3,1);z-index:0;}
+.flow.on .flow-line{transform:scaleX(1);}
+.fstep{position:relative;z-index:1;padding:0 10px;text-align:center;}
+.fdot{width:54px;height:54px;margin:0 auto 22px;border-radius:50%;background:var(--bg);border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;transition:all .5s cubic-bezier(.16,1,.3,1);}
+.fdot .material-symbols-outlined{font-size:24px;color:var(--blue-light);}
+.fstep:hover .fdot{border-color:var(--blue);background:rgba(0,85,255,0.1);transform:translateY(-4px);}
+.fstep h4{font-family:var(--fd);font-weight:600;font-size:15px;letter-spacing:-0.02em;margin-bottom:7px;}
+.fstep p{font-size:12.5px;color:var(--text-50);line-height:1.5;max-width:16ch;margin:0 auto;}
+.fstep:last-child .fdot{border-color:var(--green);background:rgba(0,204,102,0.1);}
+.fstep:last-child .fdot .material-symbols-outlined{color:var(--green);}
+.fstep:last-child h4{color:var(--green);}
+@media(max-width:820px){.flow{grid-template-columns:1fr;gap:8px;}.flow::before,.flow-line{display:none;}.fstep{display:flex;align-items:center;gap:18px;text-align:left;padding:14px 0;border-top:1px solid var(--line-soft);}.fdot{margin:0;flex-shrink:0;}.fstep p{max-width:none;}}
+
+/* ══════ SPLIT (sticky head) — Leistungen & Vorgehen ══════ */
+.split{display:grid;grid-template-columns:0.85fr 1.55fr;gap:clamp(40px,6vw,96px);}
+.split-head{position:sticky;top:120px;align-self:start;}
+.split-body{min-width:0;}
+@media(max-width:920px){.split{grid-template-columns:1fr;gap:40px;}.split-head{position:static;}}
+
+/* numbered rows */
+.nrow{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(20px,3vw,48px);align-items:center;padding:clamp(28px,4vw,48px) 0;border-top:1px solid var(--line);}
+.nrow:last-child{border-bottom:1px solid var(--line);}
+.nrow-num{font-family:var(--fd);font-weight:500;font-size:clamp(34px,4.5vw,60px);letter-spacing:-0.04em;line-height:1;color:var(--text-35);transition:color .4s;}
+.nrow:hover .nrow-num{color:var(--blue-light);}
+.nrow-stage{font-family:var(--fm);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;display:block;}
+.nrow h4{font-family:var(--fd);font-weight:600;font-size:clamp(20px,2vw,27px);letter-spacing:-0.03em;line-height:1.1;}
+.nrow p{margin-top:12px;color:var(--text-50);font-size:15.5px;line-height:1.65;max-width:54ch;}
+.nrow-img{width:clamp(96px,11vw,140px);height:clamp(96px,11vw,140px);border-radius:14px;overflow:hidden;border:1px solid var(--line);flex-shrink:0;}
+.nrow-img img,.nrow-img video{width:100%;height:100%;object-fit:cover;}
+.split-note{margin-top:34px;font-size:15px;color:var(--text-50);}
+@media(max-width:620px){.nrow{grid-template-columns:auto 1fr;}.nrow-img{display:none;}}
+
+/* steps (vorgehen) — no image */
+.srow{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,3vw,40px);padding:clamp(26px,3.5vw,40px) 0;border-top:1px solid var(--line);}
+.srow:last-child{border-bottom:1px solid var(--line);}
+.srow-num{font-family:var(--fd);font-weight:500;font-size:clamp(30px,4vw,52px);letter-spacing:-0.04em;line-height:1;color:var(--text-35);transition:color .4s;}
+.srow:hover .srow-num{color:var(--blue-light);}
+.srow h4{font-family:var(--fd);font-weight:600;font-size:clamp(19px,1.9vw,25px);letter-spacing:-0.03em;}
+.srow p{margin-top:12px;color:var(--text-50);font-size:15.5px;line-height:1.65;max-width:60ch;}
+
+/* ══════ VERGLEICH (04) ══════ */
+.banner{margin-top:clamp(40px,5vw,64px);position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);aspect-ratio:21/9;background:var(--bg-2);}
+.banner img{width:100%;height:100%;object-fit:cover;}
+.banner .cap{position:absolute;left:0;right:0;bottom:0;padding:clamp(20px,3vw,32px);background:linear-gradient(0deg,rgba(0,0,0,0.7),transparent 60%);font-family:var(--fm);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-70);}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,5vw,72px);align-items:center;}
+.why-media{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--bg-2);aspect-ratio:1/1;box-shadow:0 30px 80px -30px rgba(0,0,0,0.85);}
+.why-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.why-cap{position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,2.5vw,26px);background:linear-gradient(0deg,rgba(2,4,10,0.9),transparent 72%);font-family:var(--fm);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-70);}
+@media(max-width:860px){.why-grid{grid-template-columns:1fr;gap:30px;}}
+.vs{margin-top:clamp(36px,4vw,56px);display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:18px;overflow:hidden;}
+.vs-col{padding:clamp(28px,4vw,44px);}
+.vs-col:first-child{border-right:1px solid var(--line);}
+.vs-col h3{font-family:var(--fd);font-weight:600;font-size:20px;letter-spacing:-0.02em;margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+.vs-col h3 .material-symbols-outlined{font-size:22px;font-variation-settings:'FILL' 1;}
+.vs-col.bad h3{color:var(--text-50);}
+.vs-col.bad h3 .material-symbols-outlined{color:var(--text-35);}
+.vs-col.good h3 .material-symbols-outlined{color:var(--green);}
+.vs-list{list-style:none;display:flex;flex-direction:column;gap:15px;}
+.vs-list li{display:flex;align-items:flex-start;gap:12px;font-size:15.5px;line-height:1.5;}
+.vs-list .material-symbols-outlined{font-size:19px;flex-shrink:0;margin-top:2px;}
+.vs-col.bad .vs-list li{color:var(--text-50);}
+.vs-col.bad .vs-list .material-symbols-outlined{color:var(--text-35);}
+.vs-col.good .vs-list .material-symbols-outlined{color:var(--green);}
+@media(max-width:760px){.vs{grid-template-columns:1fr;}.vs-col:first-child{border-right:none;border-bottom:1px solid var(--line);}}
+
+/* ══════ EINSTIEG ══════ */
+/* process accordion (scroll-driven; viz right on desktop, inside on mobile) */
+#process{padding-top:clamp(56px,6vw,84px);padding-bottom:clamp(56px,6vw,84px);}
+.acc-wrap{margin-top:clamp(36px,4vw,56px);display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(40px,6vw,80px);align-items:start;}
+.acc{display:flex;flex-direction:column;}
+.acc-item{border-top:1px solid var(--line);}
+.acc-item:last-child{border-bottom:1px solid var(--line);}
+.acc-head{display:flex;align-items:center;gap:16px;width:100%;background:none;border:none;cursor:pointer;text-align:left;padding:clamp(18px,2.2vw,28px) 0;color:var(--text);font-family:var(--fb);}
+.acc-num{flex-shrink:0;min-width:32px;height:21px;padding:0 9px;border-radius:100px;background:rgba(255,255,255,0.1);color:var(--text);font-family:var(--fm);font-size:11px;display:flex;align-items:center;justify-content:center;transition:background .3s,color .3s;}
+.acc-item.open .acc-num{background:var(--blue);color:#fff;}
+.acc-title{flex:1;font-family:var(--fd);font-weight:600;font-size:clamp(17px,1.7vw,22px);letter-spacing:-0.02em;line-height:1.2;color:var(--text-50);transition:color .3s;}
+.acc-item.open .acc-title{color:#fff;}
+.acc-chev{font-size:22px;color:var(--text-35);transition:transform .4s,color .3s;}
+.acc-item.open .acc-chev{transform:rotate(180deg);color:var(--blue-light);}
+.acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.16,1,.3,1);}
+.acc-item.open .acc-body{grid-template-rows:1fr;}
+.acc-body-inner{overflow:hidden;}
+.acc-body p{color:var(--text-50);font-size:15.5px;line-height:1.65;margin:0;padding:0 0 clamp(20px,2.2vw,28px) 48px;max-width:54ch;}
+.acc-viz-m{display:none;}
+.acc-panel{position:sticky;top:104px;width:100%;aspect-ratio:1/1;max-height:500px;align-self:start;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--bg-2);box-shadow:0 30px 80px -30px rgba(0,0,0,0.85);}
+.acc-panel-img{position:absolute;inset:0;opacity:0;transition:opacity .5s cubic-bezier(.16,1,.3,1);}
+.acc-panel-img.active{opacity:1;}
+.acc-panel-img img,.acc-panel-img video{width:100%;height:100%;object-fit:cover;}
+@media(max-width:900px){
+  .acc-wrap{grid-template-columns:1fr;gap:0;margin-top:clamp(28px,5vw,40px);}
+  .acc-panel{display:none;}
+  .acc-viz-m{display:block;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin:0 0 18px;aspect-ratio:1/1;background:var(--bg-2);}
+  .acc-viz-m img,.acc-viz-m video{width:100%;height:100%;object-fit:cover;display:block;}
+  .acc-body p{padding-left:0;}
+  .acc-body-inner{padding-top:2px;}
+}
+@media(min-width:901px){
+  #process{min-height:100vh;display:flex;align-items:center;padding-top:0;padding-bottom:0;}
+  #process>.wrap{width:100%;}
+  .acc-wrap{margin-top:clamp(28px,3vw,44px);}
+  .acc-panel{max-height:min(48vh,470px);}
+}
+
+.entry-card{border:1px solid var(--line);border-radius:18px;padding:clamp(40px,6vw,72px);text-align:center;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--glass),transparent);}
+.entry-card::before{content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:480px;height:480px;background:radial-gradient(circle,var(--blue-glow),transparent 65%);filter:blur(60px);opacity:.6;pointer-events:none;}
+.entry-badge{position:relative;font-family:var(--fm);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue-light);margin-bottom:24px;}
+.entry-card h3{position:relative;font-family:var(--fd);font-weight:600;font-size:clamp(26px,3.4vw,44px);letter-spacing:-0.04em;line-height:1.05;margin-bottom:22px;}
+.entry-card p{position:relative;color:var(--text-50);font-size:clamp(16px,1.5vw,19px);line-height:1.7;max-width:64ch;margin:0 auto 34px;}
+
+/* ══════ WER PASST ══════ */
+.fit{margin-top:clamp(44px,5vw,64px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3vw,40px);}
+.fit-col{border:1px solid var(--line);border-radius:18px;padding:clamp(28px,4vw,40px);}
+.fit-col.good{border-top:1px solid var(--green);}
+.fit-col h3{font-family:var(--fd);font-weight:600;font-size:19px;margin-bottom:22px;display:flex;align-items:center;gap:10px;}
+.fit-col h3 .material-symbols-outlined{font-size:22px;font-variation-settings:'FILL' 1;}
+.fit-col.good h3 .material-symbols-outlined{color:var(--green);}
+.fit-col.bad h3 .material-symbols-outlined{color:var(--text-35);}
+.fit-list{list-style:none;display:flex;flex-direction:column;gap:15px;}
+.fit-list li{display:flex;align-items:flex-start;gap:12px;font-size:15.5px;line-height:1.5;color:var(--text-70);}
+.fit-list .material-symbols-outlined{font-size:19px;flex-shrink:0;margin-top:2px;}
+.fit-col.good .fit-list .material-symbols-outlined{color:var(--green);}
+.fit-col.bad .fit-list .material-symbols-outlined{color:var(--text-35);}
+@media(max-width:760px){.fit{grid-template-columns:1fr;}}
+
+/* ══════ FALLSTUDIE (06) ══════ */
+.case{margin-top:clamp(44px,5vw,64px);display:grid;grid-template-columns:0.85fr 1.15fr;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--glass);}
+.case-media{position:relative;min-height:480px;}
+.case-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.case-ident{position:absolute;left:0;right:0;bottom:0;padding:28px;background:linear-gradient(0deg,rgba(0,0,0,0.85),transparent);}
+.case-name{font-family:var(--fd);font-weight:600;font-size:23px;letter-spacing:-0.02em;}
+.case-role{font-size:13px;color:var(--text-70);margin-top:4px;}
+.case-body{padding:clamp(32px,4vw,52px);display:flex;flex-direction:column;gap:30px;}
+.kpis{display:flex;gap:clamp(32px,5vw,56px);flex-wrap:wrap;}
+.kpi-num{font-family:var(--fd);font-weight:700;font-size:clamp(40px,5vw,64px);letter-spacing:-0.04em;line-height:1;color:var(--blue-light);}
+.kpi.green .kpi-num{color:var(--green);}
+.kpi-label{font-size:13px;color:var(--text-50);margin-top:10px;max-width:22ch;line-height:1.5;}
+.case-cap{font-family:var(--fm);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-35);margin-top:-16px;}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding-top:28px;border-top:1px solid var(--line);}
+.ba-label{font-family:var(--fm);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-35);display:block;margin-bottom:8px;}
+.ba-label.good{color:var(--green);}
+.ba p{font-size:14px;color:var(--text-50);line-height:1.6;}
+.case-quote{font-family:var(--fd);font-weight:500;font-size:clamp(19px,2vw,24px);line-height:1.5;letter-spacing:-0.02em;color:#fff;border-left:2px solid var(--blue);padding-left:22px;}
+@media(max-width:900px){.case{grid-template-columns:1fr;}.case-media{min-height:300px;}.ba{grid-template-columns:1fr;gap:16px;}}
+
+/* ══════ TEAM (07) ══════ */
+.team-intro{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(36px,5vw,72px);align-items:start;margin-top:clamp(40px,5vw,64px);}
+.team-intro p{font-size:clamp(17px,1.6vw,21px);line-height:1.6;color:var(--text-70);}
+.callout{border:1px solid var(--line);border-left:2px solid var(--blue);border-radius:14px;padding:24px;font-size:15.5px;line-height:1.65;color:var(--text-70);background:var(--glass);}
+.founders{margin-top:clamp(48px,6vw,80px);}
+.founder{display:grid;grid-template-columns:auto 1fr;gap:clamp(24px,3vw,44px);align-items:center;padding:clamp(28px,4vw,44px) 0;border-top:1px solid var(--line);}
+.founder:last-child{border-bottom:1px solid var(--line);}
+.founder-img{width:clamp(96px,10vw,128px);height:clamp(96px,10vw,128px);border-radius:18px;overflow:hidden;border:1px solid var(--line);flex-shrink:0;}
+.founder-img img{width:100%;height:100%;object-fit:cover;}
+.founder h4{font-family:var(--fd);font-weight:600;font-size:clamp(20px,2vw,26px);letter-spacing:-0.02em;}
+.founder-role{font-family:var(--fm);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-light);margin:8px 0 12px;}
+.founder p{color:var(--text-50);font-size:15px;line-height:1.65;max-width:64ch;}
+@media(max-width:760px){.team-intro{grid-template-columns:1fr;}}
+
+/* team big photo + text bios */
+.team-photo{margin:0 0 0 auto;max-width:480px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px rgba(0,0,0,0.85);}
+.team-photo img{width:100%;height:auto;display:block;}
+.founder-bios{margin-top:clamp(40px,5vw,60px);max-width:760px;margin-left:auto;margin-right:auto;display:flex;flex-direction:column;gap:clamp(26px,3.5vw,40px);}
+.fbio{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,3vw,34px);align-items:center;text-align:left;}
+.fbio-img{width:clamp(120px,13vw,164px);height:clamp(120px,13vw,164px);border-radius:16px;overflow:hidden;border:1px solid var(--line);flex-shrink:0;}
+.fbio-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.fbio h4{font-family:var(--fd);font-weight:600;font-size:clamp(19px,2vw,24px);letter-spacing:-0.02em;}
+.fbio p{color:var(--text-50);font-size:15px;line-height:1.65;margin-top:6px;}
+@media(max-width:600px){.fbio{grid-template-columns:1fr;gap:14px;text-align:center;justify-items:center;}.fbio-img{width:132px;height:132px;}}
+.team-hero{display:flex;flex-direction:column;align-items:center;text-align:center;}
+.team-kicker{justify-content:center;margin-bottom:26px;}
+.team-photo-c{width:64%;max-width:700px;margin:0;}
+.team-photo-c img{width:100%;height:auto;display:block;}
+.team-copy{position:relative;z-index:2;max-width:760px;margin-top:clamp(-185px,-11.5vw,-52px);}
+.team-hero .title{max-width:none;}
+.team-hero .sub{margin:18px auto 0;}
+@media(max-width:760px){.team-photo-c{width:94%;}.team-copy{margin-top:-14vw;}}
+.fbio-cal{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;font-weight:500;color:var(--blue-light);transition:gap .3s ease,color .3s ease;}
+.fbio-cal .material-symbols-outlined{font-size:17px;}
+.fbio-cal:hover{gap:11px;color:#fff;}
+.leitbild{max-width:720px;margin:clamp(40px,5vw,64px) auto 0;text-align:center;}
+.leitbild .kicker{justify-content:center;margin-bottom:18px;}
+.leitbild p{color:var(--text-50);font-size:clamp(16px,1.6vw,20px);line-height:1.7;}
+.contact-grid{margin-top:clamp(32px,4vw,48px);display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.contact-card{display:flex;align-items:center;gap:14px;padding:20px 22px;border:1px solid var(--line);border-radius:16px;background:var(--bg-2);transition:border-color .3s ease,transform .3s ease;}
+.contact-card:hover{border-color:var(--line-strong);transform:translateY(-2px);}
+.contact-card .material-symbols-outlined{font-size:24px;color:var(--blue-light);flex-shrink:0;}
+.contact-card .cc-l{display:block;font-family:var(--fm);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-35);}
+.contact-card .cc-v{display:block;font-size:15px;color:var(--text);margin-top:3px;}
+@media(max-width:760px){.contact-grid{grid-template-columns:1fr;}}
+
+/* ══════ FINAL CTA ══════ */
+.final{position:relative;text-align:center;padding:clamp(110px,16vw,200px) 0;overflow:hidden;}
+.final-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.5;z-index:0;}
+.final::after{content:'';position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 50%,transparent,var(--bg) 78%);z-index:0;}
+.final .wrap{position:relative;z-index:1;}
+.final h2{font-family:var(--fd);font-weight:600;font-size:clamp(27px,3.6vw,48px);letter-spacing:-0.03em;line-height:1.08;max-width:20ch;margin:0 auto;}
+.final p{margin:26px auto 44px;font-size:clamp(17px,1.6vw,21px);color:var(--text-50);max-width:60ch;line-height:1.6;}
+
+/* ══════ FOOTER ══════ */
+.footer{border-top:1px solid var(--line-soft);padding:72px 0 48px;}
+.footer-top{display:flex;justify-content:space-between;gap:48px;flex-wrap:wrap;margin-bottom:48px;}
+.footer-brand{max-width:340px;}
+.footer-logo{font-family:var(--fd);font-weight:700;font-size:21px;color:#fff;margin-bottom:14px;display:block;}
+.footer-brand p{font-size:14px;color:var(--text-50);line-height:1.7;}
+.footer-cols{display:flex;gap:clamp(36px,5vw,72px);flex-wrap:wrap;}
+.footer-col h5{font-family:var(--fm);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-35);margin-bottom:16px;}
+.footer-col a,.footer-col span{display:block;font-size:14px;color:var(--text-50);margin-bottom:11px;transition:color .3s;}
+.footer-col a:hover{color:#fff;}
+.footer-bot{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--line-soft);flex-wrap:wrap;gap:16px;}
+.footer-bot span{font-size:12px;color:var(--text-35);}
+.footer-legal{display:flex;gap:24px;}
+.footer-legal a{font-size:12px;color:var(--text-50);}
+.footer-legal a:hover{color:#fff;}
+@media(max-width:768px){.footer-top{flex-direction:column;gap:32px;}}
+
+/* ══════ MODAL ══════ */
+.modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s;}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal{background:var(--bg-2);border:1px solid var(--line);border-radius:22px;max-width:520px;width:100%;overflow:hidden;position:relative;transform:translateY(24px) scale(.97);transition:transform .5s cubic-bezier(.16,1,.3,1);}
+.modal-overlay.open .modal{transform:none;}
+.modal-close{position:absolute;top:16px;right:16px;z-index:2;width:36px;height:36px;border-radius:10px;background:var(--glass-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-70);transition:all .3s;}
+.modal-close:hover{background:rgba(255,255,255,0.1);color:#fff;}
+.modal-header{display:flex;align-items:center;gap:18px;padding:30px 30px 22px;border-bottom:1px solid var(--line-soft);}
+.modal-avatar{width:64px;height:64px;border-radius:16px;overflow:hidden;flex-shrink:0;border:1px solid var(--line);}
+.modal-avatar img{width:100%;height:100%;object-fit:cover;}
+.modal-header h3{font-family:var(--fd);font-weight:600;font-size:20px;letter-spacing:-0.02em;margin-bottom:4px;}
+.modal-header p{font-size:14px;color:var(--text-50);}
+.modal-body{padding:26px 30px 30px;}
+.modal-expect{background:var(--glass);border:1px solid var(--line-soft);border-radius:14px;padding:20px;margin-bottom:26px;}
+.modal-expect h4{font-family:var(--fd);font-weight:600;font-size:14px;margin-bottom:12px;}
+.modal-expect ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.modal-expect li{display:flex;align-items:flex-start;gap:9px;font-size:14px;color:var(--text-70);line-height:1.5;}
+.modal-expect li .material-symbols-outlined{font-size:18px;color:var(--green);flex-shrink:0;margin-top:1px;font-variation-settings:'FILL' 1;}
+.modal-form{display:flex;flex-direction:column;gap:13px;}
+.ff{display:flex;flex-direction:column;gap:5px;}
+.ff label{font-size:13px;font-weight:500;color:var(--text-70);}
+.ff input{padding:12px 15px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,0.03);color:#fff;font-family:var(--fb);font-size:15px;outline:none;transition:border-color .3s,box-shadow .3s;}
+.ff input::placeholder{color:var(--text-35);}
+.ff input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,85,255,0.2);}
+.form-submit{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:var(--blue);color:#fff;font-family:var(--fb);font-size:16px;font-weight:500;border:none;border-radius:12px;cursor:pointer;transition:all .3s;margin-top:4px;}
+.form-submit:hover{background:var(--blue-light);}
+.form-submit:disabled{opacity:.6;pointer-events:none;}
+.form-privacy{font-size:12px;color:var(--text-35);text-align:center;margin-top:10px;line-height:1.5;}
+.modal-success{padding:46px 30px;text-align:center;display:none;}
+.modal-success.show{display:block;}
+.modal-form-wrap.hide{display:none;}
+.success-icon{width:60px;height:60px;border-radius:50%;margin:0 auto 18px;background:rgba(0,204,102,0.12);display:flex;align-items:center;justify-content:center;}
+.success-icon .material-symbols-outlined{font-size:30px;color:var(--green);font-variation-settings:'FILL' 1;}
+.modal-success h3{font-family:var(--fd);font-weight:600;font-size:21px;margin-bottom:12px;letter-spacing:-0.02em;}
+.modal-success p{font-size:15px;color:var(--text-50);line-height:1.6;max-width:360px;margin:0 auto;}
+
+/* custom cursor */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9000;border-radius:50%;will-change:transform;}
+.cursor-dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--blue-light);transition:opacity .3s;}
+.cursor-ring{width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid var(--line-strong);transition:width .3s,height .3s,margin .3s,border-color .3s;}
+.cursor-ring.hover{width:54px;height:54px;margin:-27px 0 0 -27px;border-color:var(--blue);}
+.cursor-dot.hover{opacity:0;}
+body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{cursor:none;}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
+  .rv{opacity:1!important;transform:none!important;}
+  .cursor-dot,.cursor-ring{display:none!important;}
+}
+.lenis.lenis-smooth{scroll-behavior:auto!important;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <a class="logo" href="#hero">Growth Unit</a>
+    <div class="nav-links">
+      <a href="#problem">Stolpersteine</a>
+      <a href="#solutions">Leistungen</a>
+      <a href="#compare">Vergleich</a>
+      <a href="#process">Vorgehen</a>
+      <a href="about.html">Über uns</a>
+      <a href="contact.html">Kontakt</a>
+    </div>
+    <a class="nav-cta" href="#cta">Strategiegespräch</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-grid">
+    <div>
+      <h1 class="hero-h1">
+        <span class="line"><span class="line-inner">Nicht dein Marketing verliert Anfragen.</span></span>
+        <span class="line"><span class="line-inner">Sondern <span class="accent">was danach passiert.</span></span></span>
+      </h1>
+      <p class="hero-sub">Wir richten dein CRM so ein, dass keine Anfrage mehr liegen bleibt, jedes Angebot nachgefasst wird und du jederzeit siehst, wo jeder Deal steht.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#cta">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
+        <a class="btn btn-ghost" href="#process">So arbeiten wir <span class="material-symbols-outlined">arrow_downward</span></a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="pipeline" id="pipeline">
+        <div class="pl-head"><span class="live"></span> Anfragen-Pipeline <span class="pl-live-label">Live</span></div>
+        <div class="pl-cols">
+          <div class="pl-col" data-i="0">
+            <div class="pl-col-h"><span>Anfrage</span><span>4</span></div>
+            <div class="pl-deal"><div class="pl-deal-tag">Anfrage</div><div class="pl-deal-name">Anfrage #2480</div><div class="pl-deal-val">14.200 €</div></div>
+            <div class="pl-card"></div><div class="pl-card"></div>
+          </div>
+          <div class="pl-col" data-i="1">
+            <div class="pl-col-h"><span>Qualifiziert</span><span>3</span></div>
+            <div class="pl-deal"><div class="pl-deal-tag">Qualifiziert</div><div class="pl-deal-name">Anfrage #2480</div><div class="pl-deal-val">14.200 €</div></div>
+            <div class="pl-card"></div>
+          </div>
+          <div class="pl-col" data-i="2">
+            <div class="pl-col-h"><span>Angebot</span><span>2</span></div>
+            <div class="pl-deal"><div class="pl-deal-tag">Angebot</div><div class="pl-deal-name">Anfrage #2480</div><div class="pl-deal-val">14.200 €</div></div>
+            <div class="pl-card"></div>
+          </div>
+          <div class="pl-col won" data-i="3">
+            <div class="pl-col-h"><span>Gewonnen</span><span>1</span></div>
+            <div class="pl-deal"><div class="pl-deal-tag">Gewonnen ✓</div><div class="pl-deal-name">Anfrage #2480</div><div class="pl-deal-val">14.200 €</div></div>
+          </div>
+        </div>
+        <div class="pl-foot"><span class="pl-foot-l">Pipeline-Wert diesen Monat</span><span class="pl-foot-v">127.400 €</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 STOLPERSTEINE -->
+<section class="sec" id="problem">
+  <div class="wrap">
+    <div class="kicker rv"><span class="idx">01</span><span class="bar"></span>Erkennst du dich wieder?</div>
+    <h2 class="title rv">Vier Stellen, an denen jeden Monat Umsatz liegen bleibt</h2>
+    <div class="prob-grid">
+      <div class="prob rv">
+        <div class="prob-img"><video muted loop playsinline preload="none" poster="assets/problem-leak.png"><source src="assets/problem-leak.mp4" type="video/mp4"/></video></div>
+        <div class="prob-head"><span class="prob-num">01</span><h3>Anfragen gehen unter</h3></div>
+        <p>Die Anfrage kommt rein und bleibt im Postfach liegen. Niemand ist klar verantwortlich, niemand reagiert in den ersten Minuten. Der Interessent fragt woanders an.</p>
+      </div>
+      <div class="prob rv d1">
+        <div class="prob-img"><video muted loop playsinline preload="none" poster="assets/problem-static.png"><source src="assets/problem-static.mp4" type="video/mp4"/></video></div>
+        <div class="prob-head"><span class="prob-num">02</span><h3>Angebot raus, nie wieder gehört</h3></div>
+        <p>Du schickst ein Angebot über fünfstellige Summen raus, und dann ist Stille. Kein Reminder, kein Nachfassen. Das Geschäft verpufft, ohne dass du weißt warum.</p>
+      </div>
+      <div class="prob rv">
+        <div class="prob-img"><video muted loop playsinline preload="none" poster="assets/problem-steering.png"><source src="assets/problem-steering.mp4" type="video/mp4"/></video></div>
+        <div class="prob-head"><span class="prob-num">03</span><h3>Drei Anrufe, dann weg</h3></div>
+        <p>Zwei-, dreimal probiert, nicht erreicht, dann vergessen. Keine feste Wiedervorlage, alles läuft übers Bauchgefühl. Gute Leads fallen durchs Raster.</p>
+      </div>
+      <div class="prob rv d1">
+        <div class="prob-img"><video muted loop playsinline preload="none" poster="assets/problem-silo.png"><source src="assets/problem-silo.mp4" type="video/mp4"/></video></div>
+        <div class="prob-head"><span class="prob-num">04</span><h3>Kein Überblick</h3></div>
+        <p>Du weißt nicht auf Knopfdruck, welche Angebote offen sind und wo jeder Lead steht. Das Wissen steckt in Köpfen, Excel und WhatsApp-Verläufen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT BAND -->
+<section class="sec stat" id="stat">
+  <video class="sec-bg" autoplay muted loop playsinline preload="none" poster="assets/cta-ambient.png"><source src="assets/ambient.mp4" type="video/mp4"/></video>
+  <div class="wrap">
+    <div class="stat-grid">
+      <div class="rv">
+        <div class="kicker"><span class="bar"></span>Warum Tempo entscheidet</div>
+        <div class="stat-num" id="statCounter">21×</div>
+        <p class="stat-text">höhere Chance, einen Lead zu qualifizieren, wenn du innerhalb von 5 Minuten reagierst.</p>
+        <p class="stat-note">Quelle: Harvard Business Review</p>
+      </div>
+      <div class="stat-q rv d2">
+        <h3>Die Frage ist nur:</h3>
+        <p>Wie lange dauert es bei dir, bis eine Anfrage das erste Mal kontaktiert wird? Minuten? Stunden? <strong>Oder erst nach dem Wochenende?</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 SYSTEM -->
+<section class="sec" id="funnel">
+  <div class="wrap">
+    <div class="kicker rv"><span class="idx">02</span><span class="bar"></span>Ein System</div>
+    <h2 class="title rv">Von der ersten Anfrage bis zum Auftrag, an einem Ort</h2>
+    <p class="sub rv d1">Jede Anfrage läuft durch denselben klaren Weg. Nichts bleibt liegen, nichts wird vergessen, und du siehst jederzeit, wo jeder Lead steht.</p>
+    <div class="stage rv">
+      <div class="stage-video">
+        <video class="v-desktop" autoplay muted loop playsinline preload="metadata" poster="assets/journey-start.png"><source src="assets/journey.mp4" type="video/mp4"/></video>
+        <video class="v-mobile" autoplay muted loop playsinline preload="none" poster="assets/journey-start-9x16.png"><source src="assets/journey-9x16.mp4" type="video/mp4"/></video>
+      </div>
+      <div class="proc" id="flow">
+        <div class="proc-track"></div>
+        <div class="pstep"><div class="orb"><video autoplay muted loop playsinline preload="none" poster="assets/proc-anfrage.png"><source src="assets/proc-anfrage.mp4" type="video/mp4"/></video></div><span class="pstep-l">Anfrage kommt rein</span></div>
+        <div class="pstep"><div class="orb"><video autoplay muted loop playsinline preload="none" poster="assets/proc-bestaetigt.png"><source src="assets/proc-bestaetigt.mp4" type="video/mp4"/></video></div><span class="pstep-l">Automatisch bestätigt</span></div>
+        <div class="pstep"><div class="orb"><video autoplay muted loop playsinline preload="none" poster="assets/proc-qualifiziert.png"><source src="assets/proc-qualifiziert.mp4" type="video/mp4"/></video></div><span class="pstep-l">Qualifiziert</span></div>
+        <div class="pstep"><div class="orb"><video autoplay muted loop playsinline preload="none" poster="assets/proc-termin.png"><source src="assets/proc-termin.mp4" type="video/mp4"/></video></div><span class="pstep-l">Termin steht</span></div>
+        <div class="pstep"><div class="orb"><video autoplay muted loop playsinline preload="none" poster="assets/proc-angebot.png"><source src="assets/proc-angebot.mp4" type="video/mp4"/></video></div><span class="pstep-l">Angebot &amp; Nachfassen</span></div>
+        <div class="pstep"><div class="orb"><video autoplay muted loop playsinline preload="none" poster="assets/proc-auftrag.png"><source src="assets/proc-auftrag.mp4" type="video/mp4"/></video></div><span class="pstep-l">Auftrag</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 LEISTUNGEN -->
+<section class="sec" id="solutions">
+  <div class="wrap">
+    <div class="split">
+      <div class="split-head">
+        <div class="kicker rv"><span class="idx">03</span><span class="bar"></span>Drei Stufen</div>
+        <h2 class="title rv">Was wir für dich bauen</h2>
+        <p class="sub rv d1">Je nachdem, wo bei dir das meiste Geld liegen bleibt, bauen wir den Prozess Stufe für Stufe. Schlüsselfertig in deinem CRM, eingeführt mit deinem Team.</p>
+      </div>
+      <div class="split-body">
+        <div class="nrow rv">
+          <div class="nrow-num">01</div>
+          <div><span class="nrow-stage">Lead → Termin</span><h4>Mehr Termine aus Anfragen</h4><p>Alle Anfragen aus Website, Telefon und Anzeigen landen automatisch an einem Ort, werden sofort bestätigt und konsequent nachgefasst, bis ein Termin steht.</p></div>
+          <div class="nrow-img"><video autoplay muted loop playsinline preload="none" poster="assets/leistung-marketing.png"><source src="assets/leistung-marketing.mp4" type="video/mp4"/></video></div>
+        </div>
+        <div class="nrow rv">
+          <div class="nrow-num">02</div>
+          <div><span class="nrow-stage">Termin → Auftrag</span><h4>Mehr Abschlüsse aus Terminen</h4><p>Jedes Angebot bekommt eine eigene Spur mit automatischen Erinnerungen und Nachfass-Schritten. Du siehst jederzeit, welche Angebote offen sind und warum welche verloren gehen.</p></div>
+          <div class="nrow-img"><video autoplay muted loop playsinline preload="none" poster="assets/leistung-crm.png"><source src="assets/leistung-crm.mp4" type="video/mp4"/></video></div>
+        </div>
+        <div class="nrow rv">
+          <div class="nrow-num">03</div>
+          <div><span class="nrow-stage">Auftrag → Umsetzung / Abnahme</span><h4>Sauber bis zur Übergabe</h4><p>Vom unterschriebenen Auftrag bis zur Abnahme: Klare Übergaben, dokumentierte Details, automatische Kundenkommunikation. Kein Chaos, kein Zettelkrieg.</p></div>
+          <div class="nrow-img"><video autoplay muted loop playsinline preload="none" poster="assets/leistung-sparring.png"><source src="assets/leistung-sparring.mp4" type="video/mp4"/></video></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 VERGLEICH -->
+<section class="sec" id="compare">
+  <div class="wrap">
+    <div class="why-grid">
+      <div class="why-text">
+        <div class="kicker rv"><span class="idx">04</span><span class="bar"></span>Warum erst der Prozess</div>
+        <h2 class="title rv">Erst den Eimer abdichten, dann den Hahn aufdrehen</h2>
+        <p class="sub rv d1">Wenn heute 20 bis 30 Prozent deiner Anfragen nicht sauber bearbeitet werden, bringt mehr Werbung vor allem ein größeres Leck. Mehr Anfragen fließen rein und genauso schnell wieder raus. Deshalb fixen wir zuerst den Prozess. Danach trägt jeder Euro Werbung doppelt.</p>
+      </div>
+      <div class="why-media rv d1">
+        <video autoplay muted loop playsinline preload="none" poster="assets/why-bucket.png"><source src="assets/why-bucket.mp4" type="video/mp4"/></video>
+        <div class="why-cap">Erst abdichten, dann aufdrehen</div>
+      </div>
+    </div>
+    <div class="vs rv">
+      <div class="vs-col bad">
+        <h3><span class="material-symbols-outlined">do_not_disturb_on</span>Heute</h3>
+        <ul class="vs-list">
+          <li><span class="material-symbols-outlined">remove</span>Anfragen liegen im Postfach</li>
+          <li><span class="material-symbols-outlined">remove</span>Nachfassen nach Bauchgefühl</li>
+          <li><span class="material-symbols-outlined">remove</span>Angebote ohne Erinnerung</li>
+          <li><span class="material-symbols-outlined">remove</span>Überblick in Köpfen und Excel</li>
+          <li><span class="material-symbols-outlined">remove</span>Mehr Ads, gleiches Leck</li>
+        </ul>
+      </div>
+      <div class="vs-col good">
+        <h3><span class="material-symbols-outlined">check_circle</span>Mit System</h3>
+        <ul class="vs-list">
+          <li><span class="material-symbols-outlined">check</span>Jede Anfrage an einem Ort</li>
+          <li><span class="material-symbols-outlined">check</span>Automatisches Nachfassen</li>
+          <li><span class="material-symbols-outlined">check</span>Kein Angebot ohne Reminder</li>
+          <li><span class="material-symbols-outlined">check</span>Status auf einen Blick</li>
+          <li><span class="material-symbols-outlined">check</span>Werbung, die endlich trägt</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 VORGEHEN -->
+<section class="sec" id="process">
+  <div class="wrap">
+    <div class="kicker rv"><span class="idx">05</span><span class="bar"></span>So arbeiten wir</div>
+    <h2 class="title rv">So setzen wir dein CRM auf</h2>
+    <p class="sub rv d1">Von der ersten Einschätzung bis zum System, das im Alltag gelebt wird. Du musst nichts selbst einrichten.</p>
+    <div class="acc-wrap rv">
+      <div class="acc">
+        <div class="acc-item open" data-i="0">
+          <button class="acc-head"><span class="acc-num">01</span><span class="acc-title">Strategiegespräch</span><span class="acc-chev material-symbols-outlined">expand_more</span></button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <div class="acc-viz-m"><video muted loop playsinline preload="none" poster="assets/proc-step-01.png"><source src="assets/proc-step-01.mp4" type="video/mp4"/></video></div>
+            <p>Wir schauen uns deinen Anfrage- und Vertriebsprozess an: Wo Anfragen reinkommen, was dann passiert, wo es hakt. Eine ehrliche Einschätzung, ob wir Hebel sehen.</p>
+          </div></div>
+        </div>
+        <div class="acc-item" data-i="1">
+          <button class="acc-head"><span class="acc-num">02</span><span class="acc-title">Soll-Ist-Analyse</span><span class="acc-chev material-symbols-outlined">expand_more</span></button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <div class="acc-viz-m"><video muted loop playsinline preload="none" poster="assets/proc-step-02.png"><source src="assets/proc-step-02.mp4" type="video/mp4"/></video></div>
+            <p>Wir gehen jeden Schritt durch und halten fest, wie dein System konkret aussehen muss. Du bekommst einen klaren Maßnahmenplan, zugeschnitten auf deinen Alltag.</p>
+          </div></div>
+        </div>
+        <div class="acc-item" data-i="2">
+          <button class="acc-head"><span class="acc-num">03</span><span class="acc-title">Umsetzung im CRM</span><span class="acc-chev material-symbols-outlined">expand_more</span></button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <div class="acc-viz-m"><video muted loop playsinline preload="none" poster="assets/proc-step-03.png"><source src="assets/proc-step-03.mp4" type="video/mp4"/></video></div>
+            <p>Wir setzen dein CRM auf, ob von Grund auf neu oder auf Basis eines bestehenden Systems, und bauen den Prozess schlüsselfertig, inklusive Automatisierungen und Anbindung deiner Tools. Du musst nichts selbst einrichten.</p>
+          </div></div>
+        </div>
+        <div class="acc-item" data-i="3">
+          <button class="acc-head"><span class="acc-num">04</span><span class="acc-title">Einführung im Team</span><span class="acc-chev material-symbols-outlined">expand_more</span></button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <div class="acc-viz-m"><video muted loop playsinline preload="none" poster="assets/proc-step-04.png"><source src="assets/proc-step-04.mp4" type="video/mp4"/></video></div>
+            <p>Wir führen das System mit deinem Team ein, damit es im Alltag gelebt wird und nicht nach zwei Wochen wieder in Excel landet.</p>
+          </div></div>
+        </div>
+        <div class="acc-item" data-i="4">
+          <button class="acc-head"><span class="acc-num">05</span><span class="acc-title">Laufende Optimierung</span><span class="acc-chev material-symbols-outlined">expand_more</span></button>
+          <div class="acc-body"><div class="acc-body-inner">
+            <div class="acc-viz-m"><video muted loop playsinline preload="none" poster="assets/proc-step-05.png"><source src="assets/proc-step-05.mp4" type="video/mp4"/></video></div>
+            <p>Auf Wunsch bleiben wir dran: Auswerten, nachschärfen, weitere Schritte anbinden, bis alles rund läuft.</p>
+          </div></div>
+        </div>
+      </div>
+      <div class="acc-panel">
+        <div class="acc-panel-img active" data-i="0"><video muted loop playsinline preload="none" poster="assets/proc-step-01.png"><source src="assets/proc-step-01.mp4" type="video/mp4"/></video></div>
+        <div class="acc-panel-img" data-i="1"><video muted loop playsinline preload="none" poster="assets/proc-step-02.png"><source src="assets/proc-step-02.mp4" type="video/mp4"/></video></div>
+        <div class="acc-panel-img" data-i="2"><video muted loop playsinline preload="none" poster="assets/proc-step-03.png"><source src="assets/proc-step-03.mp4" type="video/mp4"/></video></div>
+        <div class="acc-panel-img" data-i="3"><video muted loop playsinline preload="none" poster="assets/proc-step-04.png"><source src="assets/proc-step-04.mp4" type="video/mp4"/></video></div>
+        <div class="acc-panel-img" data-i="4"><video muted loop playsinline preload="none" poster="assets/proc-step-05.png"><source src="assets/proc-step-05.mp4" type="video/mp4"/></video></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EINSTIEG -->
+<section class="sec" id="entry">
+  <div class="wrap">
+    <div class="entry-card rv">
+      <div class="entry-badge">Der Einstieg</div>
+      <h3>Ein klarer Plan, bevor du dich festlegst.</h3>
+      <p>Wir starten mit einem kostenlosen Strategiegespräch und einer Analyse deines Anfrageprozesses. Du bekommst eine ehrliche Einschätzung, wo wir die größten Hebel sehen, und einen konkreten Maßnahmenplan mit Soll-Ist-Abgleich. Auf dieser Grundlage entscheidest du in Ruhe, ob und in welchem Umfang wir umsetzen.</p>
+      <a class="btn btn-primary" href="#cta">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 06 FALLSTUDIE -->
+<section class="sec" id="testimonials">
+  <div class="wrap">
+    <div class="kicker rv"><span class="idx">06</span><span class="bar"></span>Fallstudie</div>
+    <h2 class="title rv">Vom Zettelchaos zum System, das im Hintergrund arbeitet</h2>
+    <div class="case rv">
+      <div class="case-media">
+        <img src="assets/fallstudie-felix.jpg" alt="Felix Till vor einer Terrassenüberdachung von FT Work &amp; Design" loading="lazy"/>
+        <div class="case-ident">
+          <div class="case-name">Felix Till</div>
+          <div class="case-role">FT Work &amp; Design · Outdoor Living</div>
+        </div>
+      </div>
+      <div class="case-body">
+        <div class="kpis">
+          <div class="kpi"><div class="kpi-num">+23 %</div><div class="kpi-label">Abschlussquote, bei gleichem Anfragenvolumen</div></div>
+        </div>
+        <div class="ba">
+          <div><span class="ba-label">Vorher</span><p>Bis spät nachts Angebote geschrieben, fehlerhafte Materialbestellungen, kein Überblick über offene Deals, Leads ohne System nachgefasst.</p></div>
+          <div><span class="ba-label good">Nachher</span><p>Jede Anfrage landet automatisch im System, jedes Angebot wird nachgefasst, klarer Überblick über alle Deals. Mehr Zeit fürs Verkaufen, weniger Fehler.</p></div>
+        </div>
+        <blockquote class="case-quote">„Es bleibt einfach nichts mehr liegen, weil automatisch immer eine Folgeaufgabe entsteht. Ich kann Anfragen jetzt wirklich systematisch abarbeiten."</blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 TEAM -->
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="team-hero">
+      <span class="kicker rv team-kicker"><span class="idx">07</span><span class="bar"></span>Das Team</span>
+      <figure class="team-photo-c rv">
+        <img src="assets/team-founders-merge.png?v=2" alt="Janosch Jassim und Valentin Hering, die Gründer von Growth Unit" loading="lazy"/>
+      </figure>
+      <div class="team-copy">
+        <h2 class="title rv">Du bekommst uns. Nicht ein Team, das wir dir verkaufen.</h2>
+        <p class="sub rv d1">Direkt mit den Gründern, von der ersten Analyse bis zum laufenden System.</p>
+      </div>
+    </div>
+    <div class="founder-bios">
+      <div class="fbio rv">
+        <div class="fbio-img"><img src="assets/janosch.jpg" alt="Janosch Jassim" loading="lazy"/></div>
+        <div><h4>Janosch Jassim</h4><div class="founder-role">Prozesse, CRM &amp; Förderung</div><p>Knapp 10 Jahre Digitalisierung im Mittelstand und Konzern, unter anderem bei der Deutschen Bahn. Baut CRM-Systeme und Automatisierungen, geprüfter Förderberater.</p></div>
+      </div>
+      <div class="fbio rv d1">
+        <div class="fbio-img"><img src="assets/valentin.jpg" alt="Valentin Hering" loading="lazy"/></div>
+        <div><h4>Valentin Hering</h4><div class="founder-role">Performance, Vertrieb &amp; Daten</div><p>6 Jahre Verantwortung für Marketingbudgets von 10.000 bis 400.000 Euro, über Startups, Scale-ups und Mittelstand. Schwerpunkt: Datenbasiertes Testing sowie Anfragen- und Vertriebsoptimierung.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final" id="cta-section">
+  <video class="final-bg" autoplay muted loop playsinline preload="none" poster="assets/cta-ambient.png"><source src="assets/ambient.mp4" type="video/mp4"/></video>
+  <div class="wrap">
+    <h2 class="rv">Bevor du mehr in Werbung steckst, sichere die Anfragen, die du schon hast.</h2>
+    <p class="rv d1">In einem kostenlosen Strategiegespräch schauen wir uns deinen Anfrageprozess an und zeigen dir ehrlich, wo der größte Hebel liegt.</p>
+    <div class="rv d2"><a class="btn btn-primary" href="#cta" style="padding:17px 34px;font-size:17px;">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a></div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="ctaModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose"><span class="material-symbols-outlined" style="font-size:20px;">close</span></button>
+    <div class="modal-form-wrap" id="modalFormWrap">
+      <div class="modal-header">
+        <div class="modal-avatar"><img src="assets/valentin.jpg" alt="Valentin Hering"/></div>
+        <div><h3>Strategiegespräch vereinbaren</h3><p>Ein erstes Gespräch mit den Gründern. Direkt und unverbindlich.</p></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-expect">
+          <h4>Das erwartet dich:</h4>
+          <ul>
+            <li><span class="material-symbols-outlined">check_circle</span>Ein ehrlicher Blick auf deinen Anfrageprozess</li>
+            <li><span class="material-symbols-outlined">check_circle</span>Wo bei dir der größte Hebel liegt</li>
+            <li><span class="material-symbols-outlined">check_circle</span>Eine klare Empfehlung, auch wenn das heißt, dass du uns nicht brauchst</li>
+          </ul>
+        </div>
+        <form class="modal-form" id="ctaForm">
+          <div class="ff"><label for="fn">Name</label><input id="fn" type="text" placeholder="Dein Vor- und Nachname" required/></div>
+          <div class="ff"><label for="fc">Unternehmen</label><input id="fc" type="text" placeholder="Name deines Unternehmens" required/></div>
+          <div class="ff"><label for="fe">E-Mail-Adresse</label><input id="fe" type="email" placeholder="deine@email.de" required/></div>
+          <div class="ff"><label for="fp">Telefonnummer</label><input id="fp" type="tel" placeholder="+49 ..." required/></div>
+          <button type="submit" class="form-submit" id="formSubmit">Strategiegespräch anfragen <span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span></button>
+        </form>
+        <p class="form-privacy">Wir nutzen deine Daten ausschließlich, um dich für das Strategiegespräch zu kontaktieren.</p>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="success-icon"><span class="material-symbols-outlined">check_circle</span></div>
+      <h3>Danke, wir haben deine Anfrage.</h3>
+      <p>Wir melden uns zeitnah persönlich bei dir und freuen uns auf den Austausch.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="footer-logo">Growth Unit</span>
+        <p>Wir bauen den Anfrageprozess in deinem CRM, damit aus Anfragen verlässlich Aufträge werden. Für eigentümergeführte Betriebe.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h5>Seite</h5>
+          <a href="#problem">Stolpersteine</a><a href="#solutions">Leistungen</a><a href="#compare">Vergleich</a><a href="#process">Vorgehen</a><a href="about.html">Über uns</a><a href="contact.html">Kontakt</a>
+        </div>
+        <div class="footer-col"><h5>Kontakt</h5>
+          <a href="mailto:kontakt@growthunit.de">kontakt@growthunit.de</a><a href="tel:+491705226263">+49 170 5226263</a><span>Alt-Tegel 15, 13507 Berlin</span>
+        </div>
+        <div class="footer-col"><h5>Social</h5>
+          <a href="https://www.linkedin.com/company/growthunit" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.instagram.com/growthunit" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bot">
+      <span>&copy; 2026 Growth Unit GmbH</span>
+      <div class="footer-legal"><a href="https://www.growthunit.de/impressum" target="_blank" rel="noopener">Impressum</a><a href="https://www.growthunit.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script>
+// baseline reveals (work without GSAP)
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}})},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+// nav
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>50),{passive:true});
+
+// stat count-up
+const statEl=document.getElementById('statCounter');
+if(statEl&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const co=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)return;let c=0;statEl.textContent='0×';const iv=setInterval(()=>{c+=0.4;if(c>=21){c=21;clearInterval(iv);}statEl.textContent=Math.floor(c)+'×';},18);co.unobserve(e.target);})},{threshold:0.5});
+  co.observe(statEl);
+}
+
+// hero pipeline: deal travels Anfrage → Gewonnen
+(function(){
+  var cols=document.querySelectorAll('#pipeline .pl-col');
+  if(!cols.length)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){cols[cols.length-1].classList.add('on');return;}
+  var i=0;cols[0].classList.add('on');
+  setInterval(function(){
+    i=(i+1)%cols.length;
+    cols.forEach(function(c,n){c.classList.toggle('on',n===i);});
+  },1600);
+})();
+
+// process accordion: setup + expose (the scroll-pin in the enhancement layer drives it)
+(function(){
+  var sec=document.getElementById('process'); if(!sec)return;
+  var items=[].slice.call(sec.querySelectorAll('.acc-item'));
+  var panels=[].slice.call(sec.querySelectorAll('.acc-panel-img'));
+  if(!items.length)return;
+  function play(el,on){ var v=el&&el.querySelector('video'); if(!v)return; if(on){var p=v.play();if(p&&p.catch)p.catch(function(){});}else{try{v.pause();}catch(e){}} }
+  var cur=-1;
+  function setActive(i){ if(i===cur)return; cur=i; items.forEach(function(it,n){it.classList.toggle('open',n===i);play(it.querySelector('.acc-viz-m'),n===i);}); panels.forEach(function(p,n){p.classList.toggle('active',n===i);play(p,n===i);}); }
+  items.forEach(function(it,i){ it.querySelector('.acc-head').addEventListener('click',function(){ setActive(i); }); });
+  setActive(0);
+  window.__acc={setActive:setActive,count:items.length,sec:sec};
+})();
+
+// stolpersteine: sequential color/play focus
+(function(){
+  var sec=document.getElementById('problem'); if(!sec)return;
+  var cards=[].slice.call(sec.querySelectorAll('.prob'));
+  if(!cards.length)return;
+  function play(c,on){ var v=c.querySelector('video'); if(!v)return; if(on){var p=v.play();if(p&&p.catch)p.catch(function(){});}else{try{v.pause();}catch(e){}} }
+  var cur=-1;
+  function setActive(i){ if(i===cur)return; cur=i; cards.forEach(function(c,n){c.classList.toggle('active',n===i);play(c,n===i);}); }
+  setActive(0);
+  window.__prob={setActive:setActive,count:cards.length,sec:sec};
+})();
+
+// modal
+const modal=document.getElementById('ctaModal'),mClose=document.getElementById('modalClose'),mWrap=document.getElementById('modalFormWrap'),mSucc=document.getElementById('modalSuccess'),cForm=document.getElementById('ctaForm');
+function openM(){modal.classList.add('open');document.body.style.overflow='hidden';}
+function closeM(){modal.classList.remove('open');document.body.style.overflow='';}
+document.querySelectorAll('a[href="#cta"], .nav-cta').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();openM();}));
+mClose.addEventListener('click',closeM);
+modal.addEventListener('click',e=>{if(e.target===modal)closeM();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
+cForm.addEventListener('submit',async e=>{
+  e.preventDefault();const btn=document.getElementById('formSubmit');btn.disabled=true;
+  btn.innerHTML='<span class="material-symbols-outlined" style="font-size:20px;animation:spin 1s linear infinite;">progress_activity</span> Wird gesendet...';
+  const d={name:fn.value,company:fc.value,email:fe.value,phone:fp.value,_subject:'Neue Strategiegespräch-Anfrage von '+fn.value,_template:'table'};
+  try{await fetch('https://formsubmit.co/ajax/kontakt@growthunit.de',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(d)});}
+  catch(err){window.location.href='mailto:kontakt@growthunit.de?subject='+encodeURIComponent('Strategiegespräch-Anfrage: '+fn.value)+'&body='+encodeURIComponent('Name: '+fn.value+'\nUnternehmen: '+fc.value+'\nE-Mail: '+fe.value+'\nTelefon: '+fp.value);}
+  mWrap.classList.add('hide');mSucc.classList.add('show');
+  setTimeout(closeM,5000);
+  setTimeout(()=>{mWrap.classList.remove('hide');mSucc.classList.remove('show');cForm.reset();btn.disabled=false;btn.innerHTML='Strategiegespräch anfragen <span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';},6000);
+});
+</script>
+
+<!-- enhancement layer -->
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, fine=matchMedia('(pointer: fine)').matches;
+  if(typeof gsap==='undefined'||typeof ScrollTrigger==='undefined'||reduce)return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  if(typeof Lenis!=='undefined'){
+    var lenis=new Lenis({duration:1.15,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+    window.__lenis=lenis;
+    lenis.on('scroll',ScrollTrigger.update);
+    gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{var h=a.getAttribute('href');if(h==='#cta'||h==='#')return;a.addEventListener('click',e=>{var t=document.querySelector(h);if(t){e.preventDefault();lenis.scrollTo(t,{offset:-80});}});});
+  }
+
+  // hero line reveal
+  gsap.set('.hero-h1 .line-inner',{yPercent:115});
+  gsap.set(['.hero-sub','.hero-actions','.hero-visual'],{opacity:0,y:30});
+  gsap.timeline({defaults:{ease:'power3.out'}})
+    .to('.hero-h1 .line-inner',{yPercent:0,duration:1.1,stagger:0.1,ease:'power4.out'},0.15)
+    .to('.hero-visual',{opacity:1,y:0,duration:1.1},0.4)
+    .to('.hero-sub',{opacity:1,y:0,duration:0.9},0.7)
+    .to('.hero-actions',{opacity:1,y:0,duration:0.9},0.85);
+
+  // funnel line scrub
+  var flow=document.getElementById('flow');
+  if(flow){flow.classList.add('on');gsap.fromTo('.flow-line',{scaleX:0},{scaleX:1,ease:'none',scrollTrigger:{trigger:'#funnel',start:'top 60%',end:'bottom 80%',scrub:0.6}});}
+
+  // stat glow parallax
+  var g=document.querySelector('.stat-glow');
+  if(g)gsap.to(g,{yPercent:30,ease:'none',scrollTrigger:{trigger:'.stat',start:'top bottom',end:'bottom top',scrub:true}});
+
+  // process: pin & step through the toggles (anchored/calm); auto-open fallback if it would not fit the viewport
+  var acc=window.__acc;
+  if(acc){
+    if(matchMedia('(min-width:901px)').matches){
+      ScrollTrigger.create({trigger:acc.sec,start:'top top',end:'+='+Math.round(acc.count*innerHeight*0.62),pin:true,anticipatePin:1,
+        onUpdate:function(s){ acc.setActive(Math.min(acc.count-1, Math.floor(s.progress*acc.count*0.999))); }});
+    } else {
+      var aitems=[].slice.call(acc.sec.querySelectorAll('.acc-item'));
+      var aio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)acc.setActive(aitems.indexOf(e.target));});},{rootMargin:'-45% 0px -45% 0px',threshold:0});
+      aitems.forEach(function(it){aio.observe(it);});
+    }
+  }
+
+  // stolpersteine: desktop = scroll-driven color/play focus (no pin, full size); mobile = all play, no focus
+  var prob=window.__prob;
+  if(prob){
+    if(matchMedia('(min-width:901px)').matches){
+      var pc=prob.sec.querySelectorAll('.prob'), pTop=pc[0], pBot=pc[2];
+      var pickProb=function(){
+        var vh=innerHeight||document.documentElement.clientHeight;
+        var t1=pTop?pTop.getBoundingClientRect().top/vh:1; // Oberkante obere Reihe (Anteil Viewport)
+        var t3=pBot?pBot.getBoundingClientRect().top/vh:1; // Oberkante untere Reihe
+        if(t3<=0.32) return 3;   // Video 4: untere Reihe erreicht oberes Drittel
+        if(t3<=0.60) return 2;   // Video 3: untere Reihe gut im Bild, bleibt bis 0.32 aktiv
+        if(t1<=0.40) return 1;   // Video 2
+        return 0;                // Video 1
+      };
+      ScrollTrigger.create({trigger:prob.sec,start:'top bottom',end:'bottom top',
+        onUpdate:function(){ prob.setActive(Math.min(prob.count-1, pickProb())); }});
+    } else {
+      prob.sec.querySelectorAll('.prob video').forEach(function(v){var p=v.play();if(p&&p.catch)p.catch(function(){});});
+    }
+  }
+
+  // system (mobile): prozessschritte ueber dem video, sequenziell aufbauen
+  var flow=document.getElementById('flow');
+  if(flow && matchMedia('(max-width:768px)').matches){
+    var fsteps=[].slice.call(flow.querySelectorAll('.pstep'));
+    var fstage=flow.closest('.stage')||flow.parentNode;
+    flow.classList.add('build');
+    var revealN=function(prog){
+      var n=Math.round(prog*fsteps.length); if(n<1)n=1;
+      fsteps.forEach(function(p,i){ p.classList.toggle('show', i<n); });
+    };
+    ScrollTrigger.create({trigger:fstage,start:'top 80%',end:'bottom 65%',
+      onUpdate:function(s){ revealN(s.progress); }});
+    revealN(0);
+  }
+
+  // magnetic buttons
+  if(fine){document.querySelectorAll('.btn-primary,.nav-cta').forEach(b=>{
+    b.addEventListener('mousemove',e=>{var r=b.getBoundingClientRect();gsap.to(b,{x:(e.clientX-(r.left+r.width/2))*0.3,y:(e.clientY-(r.top+r.height/2))*0.4,duration:.5,ease:'power3.out'});});
+    b.addEventListener('mouseleave',()=>gsap.to(b,{x:0,y:0,duration:.7,ease:'elastic.out(1,0.4)'}));
+  });}
+
+  // custom cursor
+  if(fine){
+    var dot=document.createElement('div');dot.className='cursor-dot';var ring=document.createElement('div');ring.className='cursor-ring';
+    document.body.appendChild(dot);document.body.appendChild(ring);document.body.classList.add('cursor-on');
+    var dx=gsap.quickTo(dot,'x',{duration:.12,ease:'power3'}),dy=gsap.quickTo(dot,'y',{duration:.12,ease:'power3'}),rx=gsap.quickTo(ring,'x',{duration:.4,ease:'power3'}),ry=gsap.quickTo(ring,'y',{duration:.4,ease:'power3'});
+    addEventListener('mousemove',e=>{dx(e.clientX);dy(e.clientY);rx(e.clientX);ry(e.clientY);});
+    document.querySelectorAll('a,button,input,.prob,.nrow,.founder,.case').forEach(el=>{el.addEventListener('mouseenter',()=>{ring.classList.add('hover');dot.classList.add('hover');});el.addEventListener('mouseleave',()=>{ring.classList.remove('hover');dot.classList.remove('hover');});});
+  }
+
+  addEventListener('load',()=>ScrollTrigger.refresh());
+})();
+</script>
+
+</body>
+</html>
