@@ -297,6 +297,7 @@ body::after{
 #process{padding-top:clamp(56px,6vw,84px);padding-bottom:clamp(56px,6vw,84px);}
 .acc-wrap{margin-top:clamp(36px,4vw,56px);display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(40px,6vw,80px);align-items:start;}
 .acc{display:flex;flex-direction:column;}
+.acc-track{position:relative;transition:transform .55s cubic-bezier(.16,1,.3,1);}
 .acc-item{border-top:1px solid var(--line);}
 .acc-item:last-child{border-bottom:1px solid var(--line);}
 .acc-head{display:flex;align-items:center;gap:16px;width:100%;background:none;border:none;cursor:pointer;text-align:left;padding:clamp(18px,2.2vw,28px) 0;color:var(--text);font-family:var(--fb);}
@@ -318,15 +319,16 @@ body::after{
 @media(max-width:900px){
   .acc-wrap{grid-template-columns:1fr;gap:0;margin-top:clamp(28px,5vw,40px);}
   .acc-panel{display:none;}
-  .acc-viz-m{display:block;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin:0 0 18px;aspect-ratio:1/1;background:var(--bg-2);}
+  .acc-viz-m{display:block;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin:0 0 16px;aspect-ratio:16/9;background:var(--bg-2);}
   .acc-viz-m img,.acc-viz-m video{width:100%;height:100%;object-fit:cover;display:block;}
   .acc-body p{padding-left:0;}
   .acc-body-inner{padding-top:2px;}
 }
 @media(min-width:901px){
-  #process{min-height:100vh;display:flex;align-items:center;padding-top:0;padding-bottom:0;}
+  #process{min-height:100vh;display:flex;align-items:flex-start;padding-top:clamp(88px,12vh,128px);padding-bottom:0;}
   #process>.wrap{width:100%;}
-  .acc-wrap{margin-top:clamp(28px,3vw,44px);}
+  .acc-wrap{margin-top:clamp(28px,3vw,44px);align-items:start;}
+  .acc{overflow:hidden;max-height:min(54vh,500px);}
   .acc-panel{max-height:min(48vh,470px);}
 }
 
@@ -562,22 +564,22 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
         <div class="pl-cols">
           <div class="pl-col" data-i="0">
             <div class="pl-col-h"><span>Anfrage</span><span>4</span></div>
-            <div class="pl-deal"><div class="pl-deal-tag">Anfrage</div><div class="pl-deal-name">Anfrage #2480</div><div class="pl-deal-val">14.200 €</div></div>
+            <div class="pl-deal"><div class="pl-deal-tag">Anfrage</div><div class="pl-deal-name">Fam. Vogel</div><div class="pl-deal-val">14.200 €</div></div>
             <div class="pl-card"></div><div class="pl-card"></div>
           </div>
           <div class="pl-col" data-i="1">
             <div class="pl-col-h"><span>Qualifiziert</span><span>3</span></div>
-            <div class="pl-deal"><div class="pl-deal-tag">Qualifiziert</div><div class="pl-deal-name">Anfrage #2480</div><div class="pl-deal-val">14.200 €</div></div>
+            <div class="pl-deal"><div class="pl-deal-tag">Qualifiziert</div><div class="pl-deal-name">Carport Meyer</div><div class="pl-deal-val">8.900 €</div></div>
             <div class="pl-card"></div>
           </div>
           <div class="pl-col" data-i="2">
             <div class="pl-col-h"><span>Angebot</span><span>2</span></div>
-            <div class="pl-deal"><div class="pl-deal-tag">Angebot</div><div class="pl-deal-name">Anfrage #2480</div><div class="pl-deal-val">14.200 €</div></div>
+            <div class="pl-deal"><div class="pl-deal-tag">Angebot</div><div class="pl-deal-name">Terrasse Klein</div><div class="pl-deal-val">21.500 €</div></div>
             <div class="pl-card"></div>
           </div>
           <div class="pl-col won" data-i="3">
             <div class="pl-col-h"><span>Gewonnen</span><span>1</span></div>
-            <div class="pl-deal"><div class="pl-deal-tag">Gewonnen ✓</div><div class="pl-deal-name">Anfrage #2480</div><div class="pl-deal-val">14.200 €</div></div>
+            <div class="pl-deal"><div class="pl-deal-tag">Gewonnen ✓</div><div class="pl-deal-name">Wintergarten Braun</div><div class="pl-deal-val">18.700 €</div></div>
           </div>
         </div>
         <div class="pl-foot"><span class="pl-foot-l">Pipeline-Wert diesen Monat</span><span class="pl-foot-v">127.400 €</span></div>
@@ -625,7 +627,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
         <div class="kicker"><span class="bar"></span>Warum Tempo entscheidet</div>
         <div class="stat-num" id="statCounter">21×</div>
         <p class="stat-text">höhere Chance, einen Lead zu qualifizieren, wenn du innerhalb von 5 Minuten reagierst.</p>
-        <p class="stat-note">Quelle: Harvard Business Review</p>
+        <p class="stat-note">Quelle: MIT, Lead Response Management Study</p>
       </div>
       <div class="stat-q rv d2">
         <h3>Die Frage ist nur:</h3>
@@ -736,6 +738,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
     <p class="sub rv d1">Von der ersten Einschätzung bis zum System, das im Alltag gelebt wird. Du musst nichts selbst einrichten.</p>
     <div class="acc-wrap rv">
       <div class="acc">
+        <div class="acc-track">
         <div class="acc-item open" data-i="0">
           <button class="acc-head"><span class="acc-num">01</span><span class="acc-title">Strategiegespräch</span><span class="acc-chev material-symbols-outlined">expand_more</span></button>
           <div class="acc-body"><div class="acc-body-inner">
@@ -770,6 +773,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
             <div class="acc-viz-m"><video muted loop playsinline preload="none" poster="assets/proc-step-05.png"><source src="assets/proc-step-05.mp4" type="video/mp4"/></video></div>
             <p>Auf Wunsch bleiben wir dran: Auswerten, nachschärfen, weitere Schritte anbinden, bis alles rund läuft.</p>
           </div></div>
+        </div>
         </div>
       </div>
       <div class="acc-panel">
@@ -971,8 +975,10 @@ if(statEl&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
   var panels=[].slice.call(sec.querySelectorAll('.acc-panel-img'));
   if(!items.length)return;
   function play(el,on){ var v=el&&el.querySelector('video'); if(!v)return; if(on){var p=v.play();if(p&&p.catch)p.catch(function(){});}else{try{v.pause();}catch(e){}} }
-  var cur=-1;
-  function setActive(i){ if(i===cur)return; cur=i; items.forEach(function(it,n){it.classList.toggle('open',n===i);play(it.querySelector('.acc-viz-m'),n===i);}); panels.forEach(function(p,n){p.classList.toggle('active',n===i);play(p,n===i);}); }
+  var cur=-1, track=sec.querySelector('.acc-track');
+  function setActive(i){ if(i===cur)return; cur=i; items.forEach(function(it,n){it.classList.toggle('open',n===i);play(it.querySelector('.acc-viz-m'),n===i);}); panels.forEach(function(p,n){p.classList.toggle('active',n===i);play(p,n===i);});
+    if(track){ if(matchMedia('(min-width:901px)').matches){ var off=0; for(var j=0;j<i;j++){ off+=items[j].querySelector('.acc-head').offsetHeight+1; } track.style.transform='translateY(-'+off+'px)'; } else { track.style.transform=''; } }
+  }
   items.forEach(function(it,i){ it.querySelector('.acc-head').addEventListener('click',function(){ setActive(i); }); });
   setActive(0);
   window.__acc={setActive:setActive,count:items.length,sec:sec};
