@@ -575,6 +575,86 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
 .prose figcaption{margin-top:14px;font-family:var(--fm);font-size:12px;letter-spacing:0.06em;color:#fff;}
 .art-pipeline{max-width:920px;margin:clamp(34px,5vw,56px) auto 0;padding:0 24px;}
 .art-viz-cap{margin-top:16px;text-align:center;font-family:var(--fm);font-size:12px;letter-spacing:0.06em;color:#fff;}
+
+/* ══ CTA + caption readability (white) ══ */
+.inline-cta h3{font-size:clamp(18px,1.9vw,22px);}
+.inline-cta p{color:rgba(255,255,255,0.88);}
+.end-cta .sub{color:rgba(255,255,255,0.88);}
+
+/* ══ animated section visuals (pipeline-style) ══ */
+.viz{position:relative;margin:clamp(30px,4vw,46px) 0;border:1px solid var(--line);border-radius:20px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.02));
+  padding:clamp(24px,3.6vw,42px);overflow:hidden;box-shadow:0 40px 100px -50px rgba(0,0,0,0.85);}
+.viz-cap{margin-top:22px;text-align:center;font-family:var(--fm);font-size:12px;letter-spacing:0.05em;line-height:1.55;color:#fff;}
+.viz-svg{width:100%;height:auto;display:block;overflow:visible;}
+.n-rect{fill:rgba(255,255,255,0.045);stroke:var(--line-strong);stroke-width:1;}
+.n-txt{fill:#fff;font-family:'JetBrains Mono',monospace;font-size:13px;}
+.n-sub{fill:rgba(255,255,255,0.6);font-family:'JetBrains Mono',monospace;font-size:10px;}
+
+/* F1 + F7 flow lines */
+.ch-path{fill:none;stroke:rgba(255,255,255,0.16);stroke-width:1.5;}
+.ch-hub{fill:rgba(0,85,255,0.16);stroke:var(--blue);stroke-width:1.5;}
+.ch-dot{fill:var(--blue-light);}
+@media(prefers-reduced-motion:reduce){.ch-dot,.ch-pulse{display:none;}}
+
+/* F3 cascade */
+.casc{position:relative;padding-top:6px;}
+.casc-track{position:absolute;left:7%;right:7%;top:33px;height:2px;background:var(--line);border-radius:2px;}
+.casc-fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--blue-light));border-radius:2px;}
+.casc-steps{display:flex;justify-content:space-between;gap:8px;position:relative;}
+.casc-step{flex:1;text-align:center;opacity:0.3;transition:opacity .5s cubic-bezier(.16,1,.3,1);}
+.casc-step.on{opacity:1;}
+.casc-ic{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;
+  background:#06070c;border:1px solid var(--line-strong);color:#fff;transition:border-color .5s,box-shadow .5s,background .5s,color .5s;}
+.casc-ic .material-symbols-outlined{font-size:24px;}
+.casc-step.on .casc-ic{border-color:var(--blue);background:rgba(0,85,255,0.16);box-shadow:0 0 28px rgba(0,85,255,0.45);}
+.casc-step.miss.on .casc-ic{border-color:var(--red);background:rgba(255,51,68,0.13);box-shadow:0 0 28px rgba(255,51,68,0.35);color:#ff8b97;}
+.casc-step.win.on .casc-ic{border-color:var(--green);background:rgba(0,204,102,0.16);box-shadow:0 0 28px rgba(0,204,102,0.45);color:#5bffae;}
+.casc-lab{font-family:var(--fm);font-size:10px;letter-spacing:0.03em;color:#fff;line-height:1.45;}
+@media(max-width:600px){.casc-track{display:none;}.casc-steps{flex-wrap:wrap;gap:20px 6px;}.casc-step{flex:0 0 30%;}.casc-ic{width:46px;height:46px;}}
+
+/* F5 task list */
+.tk{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,0.02);overflow:hidden;}
+.tk-head{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--line-soft);font-family:var(--fd);font-weight:600;font-size:15px;color:#fff;}
+.tk-head .material-symbols-outlined{font-size:19px;color:var(--blue-light);}
+.tk-count{margin-left:auto;font-family:var(--fm);font-size:11px;color:var(--text-50);}
+.tk-row{display:flex;align-items:center;gap:13px;padding:14px 18px;border-bottom:1px solid var(--line-soft);opacity:0;transform:translateY(10px);}
+.tk-row:last-child{border-bottom:none;}
+.tk-row .material-symbols-outlined{font-size:18px;color:var(--text-50);}
+.tk-t{font-size:14px;color:#fff;}
+.tk-due{margin-left:auto;font-family:var(--fm);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-50);border:1px solid var(--line);border-radius:100px;padding:4px 10px;}
+.tk-row.new{background:rgba(0,85,255,0.08);}
+.tk-row.new .material-symbols-outlined{color:var(--blue-light);}
+.tk-row.new .tk-due{color:var(--blue-light);border-color:var(--blue);}
+.viz.vis .tk-row{animation:tkIn .6s cubic-bezier(.16,1,.3,1) forwards;}
+.viz.vis .tk-row:nth-child(2){animation-delay:.1s;}
+.viz.vis .tk-row:nth-child(3){animation-delay:.25s;}
+.viz.vis .tk-row:nth-child(4){animation-delay:.4s;}
+.viz.vis .tk-row:nth-child(5){animation-delay:.55s;}
+.viz.vis .tk-row:nth-child(6){animation-delay:.7s;}
+@keyframes tkIn{to{opacity:1;transform:none;}}
+@media(prefers-reduced-motion:reduce){.tk-row{opacity:1;transform:none;animation:none!important;}}
+
+/* F9 aftercare */
+.af{display:flex;align-items:stretch;justify-content:center;gap:14px;flex-wrap:wrap;}
+.af-step{flex:1;min-width:150px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,0.03);
+  padding:22px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.af-step .material-symbols-outlined{font-size:30px;color:var(--blue-light);}
+.af-step.won .material-symbols-outlined{color:var(--green);}
+.af-step .af-t{font-family:var(--fm);font-size:11px;letter-spacing:0.04em;color:#fff;line-height:1.5;}
+.af-arrow{display:flex;align-items:center;color:var(--text-35);}
+.af-arrow .material-symbols-outlined{font-size:22px;}
+.af-stars{display:flex;gap:4px;font-size:22px;line-height:1;}
+.af-star{color:rgba(255,255,255,0.18);transition:color .4s;}
+.viz.vis .af-star{animation:starPop .5s cubic-bezier(.16,1,.3,1) forwards;}
+.viz.vis .af-star:nth-child(1){animation-delay:.2s;}
+.viz.vis .af-star:nth-child(2){animation-delay:.35s;}
+.viz.vis .af-star:nth-child(3){animation-delay:.5s;}
+.viz.vis .af-star:nth-child(4){animation-delay:.65s;}
+.viz.vis .af-star:nth-child(5){animation-delay:.8s;}
+@keyframes starPop{to{color:#ffc23d;}}
+@media(max-width:600px){.af-arrow{transform:rotate(90deg);}}
+@media(prefers-reduced-motion:reduce){.af-star{color:#ffc23d;animation:none!important;}}
 .pullquote{border-left:2px solid var(--blue);padding:6px 0 6px 28px;margin:2.4em 0;
   font-family:var(--fd);font-weight:500;font-size:clamp(21px,2.2vw,28px);line-height:1.3;letter-spacing:-0.02em;color:#fff;max-width:24ch;}
 .pullquote cite{display:block;margin-top:16px;font-family:var(--fm);font-weight:400;font-size:12px;font-style:normal;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue-light);}
@@ -778,15 +858,15 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
     <aside class="toc rv">
   <div class="kicker">Auf dieser Seite</div>
   <ul>
-    <li><a href="#anlaufstelle">Alles an einem Ort</a></li>
-    <li><a href="#bestaetigung">Sofort die richtige Antwort</a></li>
-    <li><a href="#ausschoepfen">Jede Anfrage ausschöpfen</a></li>
-    <li><a href="#schritt">Immer ein nächster Schritt</a></li>
-    <li><a href="#aufgaben">Aufgaben entstehen automatisch</a></li>
-    <li><a href="#nachfassen">Strukturiert nachfassen</a></li>
-    <li><a href="#angepasst">Das Tool passt sich an</a></li>
-    <li><a href="#historie">Eine Quelle der Wahrheit</a></li>
-    <li><a href="#danach">Nach dem Auftrag</a></li>
+    <li><a href="#anlaufstelle">Jede Anfrage am selben Ort</a></li>
+    <li><a href="#bestaetigung">Der Kunde hört sofort von dir</a></li>
+    <li><a href="#ausschoepfen">Jede Anfrage voll ausschöpfen</a></li>
+    <li><a href="#schritt">Alles grau, bloß nichts gelb</a></li>
+    <li><a href="#aufgaben">Aufgaben schreiben sich selbst</a></li>
+    <li><a href="#nachfassen">Dranbleiben, ohne zu nerven</a></li>
+    <li><a href="#angepasst">Werkzeug passt sich dir an</a></li>
+    <li><a href="#historie">Du vergisst nie, was war</a></li>
+    <li><a href="#danach">Nach dem letzten Handschlag</a></li>
     <li><a href="#faq">Häufige Fragen</a></li>
   </ul>
   <div class="docs-meta">10 Min. Lesezeit<br/>Aktualisiert 16. Juni 2026<br/>Kategorie: Prozess</div>
@@ -802,74 +882,154 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
   </ul>
 </div>
 
-<p>Die meisten Betriebe bekommen genug Anfragen. Das Problem ist, was danach passiert.</p>
+<p>Die meisten Betriebe haben kein Problem damit, Anfragen zu bekommen. Das Problem fängt danach an.</p>
 
-<p>Ein gutes Beispiel ist Felix, einer unserer Kunden. Er verkauft Terrassenüberdachungen, ein teures und komplexes Produkt. Über unser Marketing kamen so viele Anfragen rein, dass er bis tief in die Nacht Angebote geschrieben hat und im Tagesgeschäft versank. Teile wurden falsch bestellt, Sachen gingen unter, das hat Zeit, Nerven und Geld gekostet.</p>
+<p>Nimm Felix, einen unserer Kunden. Er baut Terrassenüberdachungen, ein schönes, teures, kompliziertes Produkt. Wir haben ihm über Marketing so viele Anfragen gebracht, dass er abends um elf noch Angebote getippt hat. Irgendwann gingen Teile in der falschen Größe raus, Termine rutschten durch, und am Monatsende fehlte Geld, von dem keiner so genau sagen konnte, wo es geblieben war.</p>
 
-<p>Das Problem war nicht die Menge der Anfragen. Es war der fehlende Ablauf dahinter. Genau das löst ein Anfrageprozess: Jede Anfrage nimmt denselben Weg, egal wer gerade Zeit hat. Hier sind die Schlüsselfaktoren, auf die es ankommt, so wie wir den Prozess für unsere Kunden bauen.</p>
+<p>Das lag nicht an den Anfragen. Es lag daran, dass es keinen festen Weg gab, wie eine Anfrage durch den Betrieb läuft. Genau diesen Weg bauen wir. Und so sieht er aus, Schritt für Schritt.</p>
 
-<h2 id="anlaufstelle">1. Alles landet an einem Ort</h2>
-<p>Der erste Schlüssel ist einfach: Jede Anfrage landet an einer einzigen Stelle. Egal, ob sie über die Website kommt, über das Telefon, über Meta-Anzeigen oder über einen KI-Agenten am Telefon. Alles fließt automatisch in dein CRM, bei Felix ist das Pipedrive.</p>
-<p>Warum das so wichtig ist: Solange Anfragen in fünf verschiedenen Postfächern und auf Zetteln liegen, geht früher oder später etwas verloren. Wenn alles sichtbar an einem Ort liegt, kann nichts mehr unbemerkt durchrutschen.</p>
+<h2 id="anlaufstelle">Jede Anfrage kommt am selben Ort an</h2>
+<p>Eine Anfrage kommt über die Website. Die nächste ruft an. Die dritte schreibt über Meta, die vierte landet bei einem KI-Agenten am Telefon. Früher hätte jede davon woanders gelegen: ein Postfach hier, ein Zettel da, eine Notiz auf dem Handy.</p>
+<p>Bei uns laufen sie alle an einer Stelle zusammen, in deinem CRM. Du musst nicht mehr suchen und nichts mehr zusammentragen. Du öffnest ein Fenster und siehst alles, was reingekommen ist. Und was du sehen kannst, geht nicht mehr verloren.</p>
 
-<h2 id="bestaetigung">2. Sofort die richtige Antwort</h2>
-<p>Sobald sich jemand meldet, bekommt er automatisch eine Eingangsbestätigung. Aber nicht irgendeine. Sie passt zur Quelle und zum Produkt: Woher kommt die Anfrage, und wofür interessiert sich die Person?</p>
-<p>Wer über eine bestimmte Landingpage zu einem bestimmten Produkt anfragt, bekommt genau die passende Bestätigung dazu. So fühlt sich der Kunde von der ersten Minute an gesehen, ohne dass jemand bei dir von Hand eine Mail tippen muss.</p>
+<div class="viz rv">
+  <svg class="viz-svg" viewBox="0 0 640 268" role="img" aria-label="Alle Kanäle laufen in einem CRM zusammen">
+    <path class="ch-path" d="M188,44 C322,44 358,134 462,134"/>
+    <path class="ch-path" d="M188,104 C330,104 372,134 462,134"/>
+    <path class="ch-path" d="M188,164 C330,164 372,134 462,134"/>
+    <path class="ch-path" d="M188,224 C322,224 358,134 462,134"/>
+    <g><rect class="n-rect" x="24" y="24" width="164" height="40" rx="10"/><text class="n-txt" x="44" y="49">Website</text></g>
+    <g><rect class="n-rect" x="24" y="84" width="164" height="40" rx="10"/><text class="n-txt" x="44" y="109">Telefon</text></g>
+    <g><rect class="n-rect" x="24" y="144" width="164" height="40" rx="10"/><text class="n-txt" x="44" y="169">Meta-Ads</text></g>
+    <g><rect class="n-rect" x="24" y="204" width="164" height="40" rx="10"/><text class="n-txt" x="44" y="229">KI-Agent</text></g>
+    <circle class="ch-pulse" cx="535" cy="134" r="34" fill="rgba(0,85,255,0.28)"><animate attributeName="r" values="34;72" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.55;0" dur="2.6s" repeatCount="indefinite"/></circle>
+    <rect class="ch-hub" x="462" y="86" width="146" height="96" rx="14"/>
+    <text class="n-txt" x="535" y="130" text-anchor="middle" style="font-size:17px;">CRM</text>
+    <text class="n-sub" x="535" y="152" text-anchor="middle">eine Anlaufstelle</text>
+    <circle class="ch-dot" r="4"><animateMotion path="M188,44 C322,44 358,134 462,134" dur="2.6s" begin="0s" repeatCount="indefinite"/></circle>
+    <circle class="ch-dot" r="4"><animateMotion path="M188,104 C330,104 372,134 462,134" dur="2.6s" begin="0.65s" repeatCount="indefinite"/></circle>
+    <circle class="ch-dot" r="4"><animateMotion path="M188,164 C330,164 372,134 462,134" dur="2.6s" begin="1.3s" repeatCount="indefinite"/></circle>
+    <circle class="ch-dot" r="4"><animateMotion path="M188,224 C322,224 358,134 462,134" dur="2.6s" begin="1.95s" repeatCount="indefinite"/></circle>
+  </svg>
+  <p class="viz-cap">Website, Telefon, Meta, KI-Agent: jede Anfrage fließt automatisch in dieselbe Anlaufstelle.</p>
+</div>
 
-<h2 id="ausschoepfen">3. Jede Anfrage voll ausschöpfen</h2>
-<p>Das ist der wichtigste Punkt. In den meisten Vertriebsteams läuft es so: Ein Lead wird ein- oder zweimal angerufen. Geht niemand ran, heißt es "war nicht erreichbar", und der Lead wird fallen gelassen. Ohne Notiz, ohne nächsten Versuch.</p>
-<p>Genau das verhindern wir. Wird ein Lead nicht erreicht, passiert automatisch etwas:</p>
+<h2 id="bestaetigung">Der Kunde hört sofort von dir</h2>
+<p>In dem Moment, in dem sich jemand meldet, bekommt er eine Antwort. Nicht irgendeine, sondern die, die zu ihm passt: zu dem Produkt, nach dem er gefragt hat, und zu dem Weg, über den er gekommen ist.</p>
+<p>Das klingt nach Kleinigkeit, ist aber der erste Eindruck. Der Kunde merkt sofort, hier kümmert sich jemand. Und das Beste daran: niemand bei dir muss dafür eine Mail schreiben. Es passiert von allein.</p>
+
+<h2 id="ausschoepfen">Jede Anfrage voll ausschöpfen</h2>
+<p>Jetzt kommt der Teil, der den meisten Umsatz rettet. In vielen Betrieben läuft es so: Man ruft einen Interessenten einmal an, vielleicht zweimal. Geht keiner ran, heißt es "war nicht erreichbar", und der Kontakt verschwindet. Ohne Notiz, ohne zweiten Versuch.</p>
+<p>Bei uns passiert in genau diesem Moment etwas:</p>
 <ul>
-  <li>Er bekommt eine E-Mail, dass du versucht hast, ihn zu erreichen.</li>
-  <li>Es wird eine Folgeaufgabe erstellt, damit du es noch einmal probierst.</li>
-  <li>Wurde er dreimal nicht erreicht, ruft ein KI-Agent automatisch noch einmal an.</li>
+  <li>Er bekommt automatisch eine E-Mail, dass du dich gemeldet hast.</li>
+  <li>Es wird eine Aufgabe angelegt, damit du es noch einmal probierst.</li>
+  <li>Und wenn er dreimal nicht rangeht, ruft ein KI-Agent für dich an.</li>
 </ul>
-<p>Das Ziel: so viele Kontaktmöglichkeiten über so viele Kanäle wie möglich, mit so wenig Arbeit wie möglich. Ein Lead wird erst dann archiviert, wenn wir wirklich alles versucht haben.</p>
+<p>So holen wir aus jeder Anfrage heraus, was drinsteckt, mit so wenig Aufwand für dich wie möglich. Ein Kontakt wird erst dann zur Seite gelegt, wenn wirklich alles versucht wurde.</p>
+
+<div class="viz rv">
+  <div class="casc">
+    <div class="casc-track"><div class="casc-fill"></div></div>
+    <div class="casc-steps">
+      <div class="casc-step"><div class="casc-ic"><span class="material-symbols-outlined">mail</span></div><div class="casc-lab">Anfrage<br/>rein</div></div>
+      <div class="casc-step miss"><div class="casc-ic"><span class="material-symbols-outlined">phone_missed</span></div><div class="casc-lab">Anruf 1<br/>nicht erreicht</div></div>
+      <div class="casc-step"><div class="casc-ic"><span class="material-symbols-outlined">forward_to_inbox</span></div><div class="casc-lab">Auto-E-Mail<br/>raus</div></div>
+      <div class="casc-step"><div class="casc-ic"><span class="material-symbols-outlined">add_task</span></div><div class="casc-lab">Folgeaufgabe<br/>angelegt</div></div>
+      <div class="casc-step miss"><div class="casc-ic"><span class="material-symbols-outlined">phone_missed</span></div><div class="casc-lab">Anruf 2 + 3<br/>nicht erreicht</div></div>
+      <div class="casc-step"><div class="casc-ic"><span class="material-symbols-outlined">smart_toy</span></div><div class="casc-lab">KI-Agent<br/>ruft an</div></div>
+      <div class="casc-step win"><div class="casc-ic"><span class="material-symbols-outlined">check_circle</span></div><div class="casc-lab">Verbunden</div></div>
+    </div>
+  </div>
+  <p class="viz-cap">Wird ein Lead nicht erreicht, greift automatisch die nächste Stufe, bis hin zum Anruf durch den KI-Agenten.</p>
+</div>
 
 <div class="pullquote">Ein Lead wird nicht teurer, wenn er kalt wird. Er wird wertlos.<cite>Aus über 40 Anfrageprozessen im Mittelstand</cite></div>
 
-<p>Der Vorteil ist nicht nur der gewonnene Auftrag. Du löst auch das alte Problem, dass ein Verkäufer sagt, der Lead sei nichts wert, obwohl er ihn nur einmal angerufen hat. Hier weißt du sicher, dass nichts mehr zu holen war, statt es nur zu vermuten.</p>
+<p>Das Schöne daran ist nicht nur der gewonnene Auftrag. Du musst dir auch nie wieder anhören, ein Lead sei nichts wert gewesen, obwohl er nur ein einziges Mal angerufen wurde. Du weißt es jetzt einfach.</p>
 
-<h2 id="schritt">4. Kein Lead ohne nächsten Schritt</h2>
-<p>In der Übersicht siehst du auf einen Blick, wo es brennt. Idealerweise ist alles grau. Was es nie sein sollte, ist gelb. Gelb heißt: keine Folgeaufgabe. Und das ist das Einzige, was wirklich nicht passieren darf.</p>
-<p>Die Regel dahinter ist simpel: Für jeden Lead und jeden Deal gibt es immer einen definierten nächsten Schritt. So geht keiner unter, auch wenn jeden Tag viele neue Anfragen reinkommen.</p>
-
-<figure class="rv">
-  <img src="assets/leistung-prozess.png" alt="Kanban-Übersicht der Deals im CRM"/>
-  <figcaption>In der Übersicht siehst du sofort, wo es brennt. Alles grau heißt: alles im Griff.</figcaption>
-</figure>
+<h2 id="schritt">Alles grau, bloß nichts gelb</h2>
+<p>In der Übersicht siehst du auf einen Blick, wo es hakt. Im Idealfall ist alles grau, ruhig, im Griff. Was du nie sehen willst, ist Gelb. Gelb heißt: hier hat keiner den nächsten Schritt festgelegt.</p>
+<p>Die Regel ist einfach. Zu jedem Kontakt gehört immer ein nächster Schritt. Egal, wie viele Anfragen an einem Tag reinkommen, keiner fällt hinten runter.</p>
 <div class="inline-cta rv">
   <h3>Verlierst du Anfragen, ohne es zu merken?</h3>
   <p>In 30 Minuten zeigen wir dir an deinen eigenen Zahlen, wo Anfragen liegen bleiben und was ein sauberer Prozess bei dir bewegen würde.</p>
   <a class="btn btn-primary" href="contact.html">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
 </div>
-<h2 id="aufgaben">5. Aufgaben entstehen automatisch, zur richtigen Zeit</h2>
-<p>Du musst die Aufgaben nicht von Hand schreiben. Viele Schritte wiederholen sich, also lassen wir sie automatisch entstehen. Schiebst du einen Kontakt zum Beispiel von "Termin vereinbart" auf "Angebot erstellen", legt das System automatisch die Aufgabe "Angebot erstellen" mit einer Deadline an. Ist ein Angebot raus, entsteht automatisch die Aufgabe, nachzufassen.</p>
-<p>Alle Aufgaben laufen in einer zentralen Übersicht zusammen: Wen muss ich heute anrufen, wem ein Angebot schicken, wo Material bestellen. Bei mehreren Mitarbeitern lässt sich das pro Person und pro Region filtern, und Aufgaben lassen sich untereinander hin und herschieben.</p>
+<h2 id="aufgaben">Die Aufgaben schreiben sich von selbst</h2>
+<p>Du musst die ganzen Aufgaben nicht von Hand anlegen. Vieles wiederholt sich ja ohnehin. Schiebst du einen Kontakt auf "Angebot", legt das System die Aufgabe "Angebot erstellen" an, mit Termin. Geht ein Angebot raus, steht die Erinnerung zum Nachfassen schon da.</p>
+<p>Alles sammelt sich an einer Stelle: Wen rufe ich heute an, wem schicke ich ein Angebot, wo muss Material bestellt werden. Arbeitest du mit mehreren Leuten, kannst du das nach Person oder Region sortieren und Aufgaben einfach weiterreichen.</p>
 
-<h2 id="nachfassen">6. Strukturiert nachfassen, besonders bei teuren Produkten</h2>
-<p>Die meisten Aufträge entstehen nicht beim ersten Kontakt, sondern beim zweiten oder dritten. Gerade bei teuren, erklärungsbedürftigen Produkten entscheidet das Nachfassen über den Auftrag.</p>
+<div class="viz rv">
+  <div class="tk">
+    <div class="tk-head"><span class="material-symbols-outlined">checklist</span>Aufgaben heute<span class="tk-count">5 offen</span></div>
+    <div class="tk-row"><span class="material-symbols-outlined">call</span><span class="tk-t">Fam. Vogel anrufen</span><span class="tk-due">heute</span></div>
+    <div class="tk-row"><span class="material-symbols-outlined">description</span><span class="tk-t">Angebot Terrasse Klein fertig machen</span><span class="tk-due">bis 14:00</span></div>
+    <div class="tk-row"><span class="material-symbols-outlined">forward_to_inbox</span><span class="tk-t">Carport Meyer nachfassen</span><span class="tk-due">heute</span></div>
+    <div class="tk-row"><span class="material-symbols-outlined">inventory_2</span><span class="tk-t">Material für Wintergarten Braun bestellen</span><span class="tk-due">morgen</span></div>
+    <div class="tk-row new"><span class="material-symbols-outlined">bolt</span><span class="tk-t">Angebot erstellen, gerade automatisch angelegt</span><span class="tk-due">neu</span></div>
+  </div>
+  <p class="viz-cap">Schiebst du einen Kontakt weiter, legt das System die passende Aufgabe von selbst an, hier blau markiert.</p>
+</div>
+
+<h2 id="nachfassen">Dranbleiben, ohne zu nerven</h2>
+<p>Die wenigsten Aufträge entstehen beim ersten Kontakt. Meistens beim zweiten oder dritten. Und gerade bei teuren Sachen, über die man eine Weile nachdenkt, entscheidet genau dieses Dranbleiben.</p>
 
 <div class="pullquote">Ich hatte ein Angebot über 21.000 Euro bekommen, und kein einziges Mal wurde nachgehakt. Hätte der Anbieter strukturiert nachgefasst, hätte ich wahrscheinlich gekauft.<cite>Janosch Jassim, über einen eigenen Markisen-Kauf</cite></div>
 
-<p>Bei einem Produkt im fünfstelligen Bereich reicht ein einziges Angebot nicht. Der Kunde ist unsicher, weil das Produkt komplex ist und es viele Möglichkeiten gibt. Wer strukturiert nachfasst und die richtigen Infos zum passenden Produkt nachreicht, nimmt ihm diese Unsicherheit. Genau dafür sorgt der Prozess, automatisch und ohne dass du daran denken musst.</p>
+<p>Bei einer Summe in dieser Größe reicht ein einziges Angebot nicht. Der Kunde ist unsicher, weil so ein Produkt viele Möglichkeiten hat. Wer ruhig dranbleibt und ihm die richtigen Infos nachreicht, nimmt ihm diese Unsicherheit. Der Prozess erinnert dich daran, ganz von allein.</p>
 
-<h2 id="angepasst">7. Das Tool passt sich dem Betrieb an</h2>
-<p>Normalerweise muss man sich an seine Tools anpassen. Wir drehen das um: Das Tool wird an deinen Alltag angepasst. Wir bilden deinen echten Ablauf ab, von der Anfrage über das Angebot bis zur Abwicklung, und binden die Werkzeuge an, die du brauchst. Ein paar Beispiele aus dem Setup bei Felix:</p>
+<h2 id="angepasst">Dein Werkzeug passt sich dir an, nicht umgekehrt</h2>
+<p>Normalerweise quetscht man seinen Betrieb in ein Tool. Wir machen es andersherum. Wir bilden deinen echten Ablauf ab und hängen die Programme dran, mit denen du sowieso arbeitest. Bei Felix sah das so aus:</p>
 <ul>
-  <li><strong>Buchhaltung (LexOffice).</strong> Kunden werden automatisch in der Buchhaltung angelegt, mit einer Kundennummer, die später überall wiederverwendet wird.</li>
-  <li><strong>Verträge und Aufmaß (PandaDoc).</strong> Rechtssichere digitale Verträge und Formulare für das Aufmaß. Die Werte landen digital im System, nicht auf einem Zettel, den später keiner mehr lesen kann. Mit einem Klick ist die Bestellung beim Lieferanten vorbereitet.</li>
-  <li><strong>Dokumente (Google Drive).</strong> Für jeden Kunden ein gesicherter Ordner mit allen Unterlagen und Lieferscheinen.</li>
+  <li><strong>Buchhaltung (LexOffice).</strong> Kunden werden automatisch angelegt, mit einer Nummer, die danach überall wieder auftaucht.</li>
+  <li><strong>Verträge und Aufmaß (PandaDoc).</strong> Rechtssichere Verträge und Formulare fürs Aufmaß. Die Maße landen digital im System, nicht auf einem Zettel, den später keiner mehr entziffern kann. Ein Klick, und die Bestellung beim Lieferanten ist vorbereitet.</li>
+  <li><strong>Dokumente (Google Drive).</strong> Pro Kunde ein sicherer Ordner, in dem alles liegt.</li>
 </ul>
-<p>So gehen die vielen kleinen Verwaltungsaufgaben leicht von der Hand, und kein Deal geht unter. Bei Felix hat genau das den Unterschied gemacht: weniger Fehler, keine falschen Bestellungen, mehr Zeit, um zu verkaufen.</p>
+<p>So gehen die hundert kleinen Handgriffe leicht von der Hand, und nichts geht unter. Bei Felix hat genau das den Unterschied gemacht: weniger Fehler, keine falschen Bestellungen, mehr Zeit zum Verkaufen.</p>
 
-<h2 id="historie">8. Eine Quelle der Wahrheit</h2>
-<p>Das E-Mail-Postfach ist direkt eingebunden. Du kannst E-Mails einem Deal zuordnen und siehst auf Kundenebene alles, was passiert ist. Dazu kommen Notizen, Dokumente und auf Wunsch transkribierte Telefonate, damit keine Notiz auf dem Tisch verloren geht.</p>
-<p>Das Ergebnis ist eine lückenlose Historie. Auch Jahre später weißt du genau, was bei einem Projekt besprochen wurde und wann was passiert ist.</p>
+<div class="viz rv">
+  <svg class="viz-svg" viewBox="0 0 640 300" role="img" aria-label="Werkzeuge docken an das CRM an">
+    <path class="ch-path" d="M110,58 L320,150"/>
+    <path class="ch-path" d="M530,58 L320,150"/>
+    <path class="ch-path" d="M92,200 L320,150"/>
+    <path class="ch-path" d="M548,200 L320,150"/>
+    <path class="ch-path" d="M320,266 L320,150"/>
+    <circle class="ch-pulse" cx="320" cy="150" r="30" fill="rgba(0,85,255,0.28)"><animate attributeName="r" values="30;64" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.55;0" dur="2.4s" repeatCount="indefinite"/></circle>
+    <rect class="ch-hub" x="270" y="120" width="100" height="60" rx="12"/>
+    <text class="n-txt" x="320" y="156" text-anchor="middle" style="font-size:16px;">CRM</text>
+    <g><rect class="n-rect" x="40" y="40" width="140" height="36" rx="9"/><text class="n-txt" x="110" y="63" text-anchor="middle" style="font-size:12px;">LexOffice</text></g>
+    <g><rect class="n-rect" x="460" y="40" width="140" height="36" rx="9"/><text class="n-txt" x="530" y="63" text-anchor="middle" style="font-size:12px;">PandaDoc</text></g>
+    <g><rect class="n-rect" x="14" y="182" width="156" height="36" rx="9"/><text class="n-txt" x="92" y="205" text-anchor="middle" style="font-size:12px;">Google Drive</text></g>
+    <g><rect class="n-rect" x="480" y="182" width="136" height="36" rx="9"/><text class="n-txt" x="548" y="205" text-anchor="middle" style="font-size:12px;">Aircall</text></g>
+    <g><rect class="n-rect" x="238" y="266" width="164" height="36" rx="9"/><text class="n-txt" x="320" y="289" text-anchor="middle" style="font-size:12px;">meinHandwerker</text></g>
+    <circle class="ch-dot" r="3.5"><animateMotion path="M110,58 L320,150" dur="2.4s" begin="0s" repeatCount="indefinite"/></circle>
+    <circle class="ch-dot" r="3.5"><animateMotion path="M530,58 L320,150" dur="2.4s" begin="0.5s" repeatCount="indefinite"/></circle>
+    <circle class="ch-dot" r="3.5"><animateMotion path="M92,200 L320,150" dur="2.4s" begin="1s" repeatCount="indefinite"/></circle>
+    <circle class="ch-dot" r="3.5"><animateMotion path="M548,200 L320,150" dur="2.4s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle class="ch-dot" r="3.5"><animateMotion path="M320,266 L320,150" dur="2.4s" begin="2s" repeatCount="indefinite"/></circle>
+  </svg>
+  <p class="viz-cap">Buchhaltung, Verträge, Dokumente, Telefonie: deine Werkzeuge docken an das CRM an, die Daten fließen von allein.</p>
+</div>
 
-<h2 id="danach">9. Nach dem Auftrag ist nicht Schluss</h2>
-<p>Mit der Schlussrechnung hört es nicht auf. War ein Kunde zufrieden, geht automatisch eine E-Mail raus mit der Bitte um eine Bewertung, zum Beispiel für dein Google-Profil. So bekommst du systematisch guten Social Proof.</p>
-<p>Danach bleibt der Kontakt erhalten. Ein Jahr nach der Umsetzung oder zum Geburtstag geht eine E-Mail raus, damit die Kundenbindung bleibt. Und über die gesammelte Kontaktbasis lassen sich gezielte Kampagnen und Newsletter verschicken, gefiltert nach den Kriterien, die du brauchst, für Upsells und Wiederkäufe.</p>
+<h2 id="historie">Du vergisst nie wieder, was war</h2>
+<p>Dein E-Mail-Postfach hängt direkt mit drin. Du ordnest eine Mail einem Kunden zu und siehst auf seiner Seite alles, was je passiert ist. Dazu Notizen, Dokumente, und wenn du willst, sogar mitgeschriebene Telefonate.</p>
+<p>Am Ende hast du zu jedem Kunden eine lückenlose Geschichte. Auch in zwei Jahren weißt du noch genau, was besprochen wurde und wann.</p>
+
+<h2 id="danach">Mit dem letzten Handschlag fängt es erst an</h2>
+<p>Mit der Schlussrechnung ist nicht Schluss. War der Kunde zufrieden, geht automatisch eine freundliche Bitte um eine Bewertung raus, zum Beispiel für dein Google-Profil. So sammelst du nach und nach gute Bewertungen, ohne daran denken zu müssen.</p>
+<p>Und der Kontakt bleibt. Ein Jahr später oder zum Geburtstag meldest du dich wieder. Über alle gesammelten Kontakte kannst du gezielt Aktionen fahren, für Nachbestellungen und Empfehlungen. So schließt sich der Kreis und beginnt von vorn.</p>
+
+<div class="viz rv">
+  <div class="af">
+    <div class="af-step won"><span class="material-symbols-outlined">verified</span><div class="af-t">Auftrag<br/>gewonnen</div></div>
+    <div class="af-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+    <div class="af-step"><div class="af-stars"><span class="af-star">★</span><span class="af-star">★</span><span class="af-star">★</span><span class="af-star">★</span><span class="af-star">★</span></div><div class="af-t">Bewertung<br/>angefragt</div></div>
+    <div class="af-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+    <div class="af-step"><span class="material-symbols-outlined">cake</span><div class="af-t">Wiederkontakt<br/>nach 1 Jahr</div></div>
+  </div>
+  <p class="viz-cap">Mit dem Auftrag fängt es an: Bewertung anfragen, in Kontakt bleiben, und der Kreis beginnt von vorn.</p>
+</div>
 
 <h2 id="faq" style="margin-bottom:8px;">Häufige Fragen</h2>
 <div class="faq">
@@ -962,5 +1122,51 @@ Object.keys(map).forEach(function(id){so.observe(document.getElementById(id));})
 (function(){var cols=document.querySelectorAll('#pipeline .pl-col');if(!cols.length)return;
 if(matchMedia('(prefers-reduced-motion: reduce)').matches){cols[cols.length-1].classList.add('on');return;}
 var i=0;cols[0].classList.add('on');setInterval(function(){i=(i+1)%cols.length;cols.forEach(function(c,n){c.classList.toggle('on',n===i);});},1600);})();
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // hero pipeline value: count up on view
+  var v = document.querySelector('.pl-foot-v');
+  if(v){
+    var target = 127400;
+    function fmt(n){ return Math.round(n).toLocaleString('de-DE') + ' \u20ac'; }
+    if(reduce){ v.textContent = fmt(target); }
+    else{
+      var io = new IntersectionObserver(function(es){ es.forEach(function(e){
+        if(!e.isIntersecting) return; io.disconnect();
+        var t0 = null;
+        function step(ts){ if(!t0) t0 = ts; var p = Math.min(1,(ts-t0)/1400);
+          v.textContent = fmt(target * (1 - Math.pow(1-p,3))); if(p<1) requestAnimationFrame(step); }
+        requestAnimationFrame(step);
+      }); }, {threshold:0.6});
+      io.observe(v);
+    }
+  }
+
+  // F3 follow-up cascade: light steps + fill line as the reader scrolls (scrub)
+  var casc = document.querySelector('.casc');
+  if(casc){
+    var steps = [].slice.call(casc.querySelectorAll('.casc-step'));
+    var fill = casc.querySelector('.casc-fill');
+    function setProgress(p){
+      var n = Math.round(p * (steps.length - 1));
+      steps.forEach(function(s,i){ s.classList.toggle('on', i <= n); });
+      if(fill) fill.style.width = (p*100) + '%';
+    }
+    if(reduce || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined'){ setProgress(1); }
+    else{
+      gsap.registerPlugin(ScrollTrigger);
+      setProgress(0);
+      ScrollTrigger.create({ trigger: casc, start: 'top 80%', end: 'bottom 55%', scrub: 0.4,
+        onUpdate: function(self){ setProgress(self.progress); } });
+    }
+  }
+})();
 </script>
 </body></html>
