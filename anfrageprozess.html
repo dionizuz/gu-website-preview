@@ -807,7 +807,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
       <a href="contact.html">Kontakt</a>
     </div>
     <div class="nav-right">
-      <a class="nav-cta" href="index-v2.html#cta">Strategiegespräch</a>
+      <a class="nav-cta" href="#cta">Strategiegespräch</a>
       <button class="nav-burger" id="navBurger" aria-label="Menü" aria-expanded="false"><span class="material-symbols-outlined">menu</span></button>
     </div>
     <div class="mobile-menu" id="mobileMenu">
@@ -816,7 +816,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
       <a href="about.html">Team</a>
       <a href="blog.html" style="color:#fff;">Wissen</a>
       <a href="contact.html">Kontakt</a>
-      <a class="mm-cta btn btn-primary" href="index-v2.html#cta">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
+      <a class="mm-cta btn btn-primary" href="#cta">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
     </div>
   </div>
 </nav>
@@ -968,7 +968,7 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
 <div class="inline-cta rv">
   <h3>Verlierst du Anfragen, ohne es zu merken?</h3>
   <p>In 30 Minuten zeigen wir dir an deinen eigenen Zahlen, wo Anfragen liegen bleiben und was ein sauberer Prozess bei dir bewegen würde.</p>
-  <a class="btn btn-primary" href="contact.html">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
+  <a class="btn btn-primary" href="#cta">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
 </div>
 <h2 id="aufgaben">Die Aufgaben schreiben sich von selbst</h2>
 <p>Du musst die ganzen Aufgaben nicht von Hand anlegen. Vieles wiederholt sich ja ohnehin. Schiebst du einen Kontakt auf "Angebot", legt das System die Aufgabe "Angebot erstellen" an, mit Termin. Geht ein Angebot raus, steht die Erinnerung zum Nachfassen schon da.</p>
@@ -1079,10 +1079,48 @@ body.cursor-on,body.cursor-on a,body.cursor-on button,body.cursor-on input{curso
   <div class="kicker rv" style="justify-content:center;">Nächster Schritt</div>
   <h2 class="title rv">Lass uns deinen Anfrageprozess ansehen.</h2>
   <p class="sub rv">30 Minuten, deine Zahlen, ein klares Bild davon, wo bei dir Aufträge liegen bleiben.</p>
-  <div class="btn-row rv"><a class="btn btn-primary" href="contact.html">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
-  <a class="btn btn-outline" href="blog.html">Mehr aus dem Magazin</a></div>
+  <div class="btn-row rv"><a class="btn btn-primary" href="#cta">Strategiegespräch vereinbaren <span class="material-symbols-outlined">arrow_forward</span></a>
+  <a class="btn btn-outline" href="blog.html">Mehr Praxiswissen</a></div>
 </div></section>
 </main>
+
+
+<!-- MODAL -->
+<div class="modal-overlay" id="ctaModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose"><span class="material-symbols-outlined" style="font-size:20px;">close</span></button>
+    <div class="modal-form-wrap" id="modalFormWrap">
+      <div class="modal-header">
+        <div class="modal-avatar"><img src="assets/valentin.jpg?v=3" alt="Valentin Hering"/></div>
+        <div><h3>Strategiegespräch vereinbaren</h3><p>Ein erstes Gespräch mit den Gründern. Direkt und unverbindlich.</p></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-expect">
+          <h4>Das erwartet dich:</h4>
+          <ul>
+            <li><span class="material-symbols-outlined">check_circle</span>Ein ehrlicher Blick auf deinen Anfrageprozess</li>
+            <li><span class="material-symbols-outlined">check_circle</span>Wo bei dir der größte Hebel liegt</li>
+            <li><span class="material-symbols-outlined">check_circle</span>Eine klare Empfehlung, auch wenn das heißt, dass du uns nicht brauchst</li>
+          </ul>
+        </div>
+        <form class="modal-form" id="ctaForm">
+          <div class="ff"><label for="fn">Name</label><input id="fn" type="text" placeholder="Dein Vor- und Nachname" required/></div>
+          <div class="ff"><label for="fc">Unternehmen</label><input id="fc" type="text" placeholder="Name deines Unternehmens" required/></div>
+          <div class="ff"><label for="fe">E-Mail-Adresse</label><input id="fe" type="email" placeholder="deine@email.de" required/></div>
+          <div class="ff"><label for="fp">Telefonnummer</label><input id="fp" type="tel" placeholder="+49 ..." required/></div>
+          <label class="form-check"><input id="fprivacy" type="checkbox" required/><span>Ich habe die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Daten einverstanden.</span></label>
+          <button type="submit" class="form-submit" id="formSubmit">Strategiegespräch anfragen <span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span></button>
+        </form>
+        <p class="form-privacy">Wir nutzen deine Daten ausschließlich, um dich für das Strategiegespräch zu kontaktieren.</p>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="success-icon"><span class="material-symbols-outlined">check_circle</span></div>
+      <h3>Danke, wir haben deine Anfrage.</h3>
+      <p>Wir melden uns zeitnah persönlich bei dir und freuen uns auf den Austausch.</p>
+    </div>
+  </div>
+</div>
 
 
 <footer class="footer">
@@ -1129,6 +1167,30 @@ Object.keys(map).forEach(function(id){so.observe(document.getElementById(id));})
 (function(){var cols=document.querySelectorAll('#pipeline .pl-col');if(!cols.length)return;
 if(matchMedia('(prefers-reduced-motion: reduce)').matches){cols[cols.length-1].classList.add('on');return;}
 var i=0;cols[0].classList.add('on');setInterval(function(){i=(i+1)%cols.length;cols.forEach(function(c,n){c.classList.toggle('on',n===i);});},1600);})();
+</script>
+
+
+<script>
+(function(){
+  var modal=document.getElementById('ctaModal'); if(!modal)return;
+  var mClose=document.getElementById('modalClose'),mWrap=document.getElementById('modalFormWrap'),mSucc=document.getElementById('modalSuccess'),cForm=document.getElementById('ctaForm');
+  function openM(){modal.classList.add('open');document.body.style.overflow='hidden';}
+  function closeM(){modal.classList.remove('open');document.body.style.overflow='';}
+  document.querySelectorAll('a[href="#cta"], .nav-cta').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();openM();});});
+  if(mClose)mClose.addEventListener('click',closeM);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeM();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeM();});
+  if(cForm)cForm.addEventListener('submit',async function(e){
+    e.preventDefault();var btn=document.getElementById('formSubmit');btn.disabled=true;
+    btn.innerHTML='<span class="material-symbols-outlined" style="font-size:20px;animation:spin 1s linear infinite;">progress_activity</span> Wird gesendet...';
+    var d={name:fn.value,company:fc.value,email:fe.value,phone:fp.value,_subject:'Neue Strategiegespräch-Anfrage von '+fn.value,_template:'table'};
+    try{await fetch('https://formsubmit.co/ajax/kontakt@growthunit.de',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(d)});}
+    catch(err){window.location.href='mailto:kontakt@growthunit.de?subject='+encodeURIComponent('Strategiegespräch-Anfrage: '+fn.value)+'&body='+encodeURIComponent('Name: '+fn.value+'\nUnternehmen: '+fc.value+'\nE-Mail: '+fe.value+'\nTelefon: '+fp.value);}
+    mWrap.classList.add('hide');mSucc.classList.add('show');
+    setTimeout(closeM,5000);
+    setTimeout(function(){mWrap.classList.remove('hide');mSucc.classList.remove('show');cForm.reset();btn.disabled=false;btn.innerHTML='Strategiegespräch anfragen <span class="material-symbols-outlined" style="font-size:20px;">arrow_forward</span>';},6000);
+  });
+})();
 </script>
 
 
